@@ -303,8 +303,7 @@ bool isShellAllowed(string shell) {
 }
 
 PasswdEntry getPassword(string user) {
-	auto db = PasswdDB.openro();
-	return db.find(user);
+	return getpwnam(user);
 }
 
 string getShadowPassword(string user) {
