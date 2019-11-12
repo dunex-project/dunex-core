@@ -303,19 +303,10 @@ bool isShellAllowed(string shell) {
 }
 
 PasswdEntry getPassword(string user) {
-	try {
-		auto db = PasswdDB.openro();
-		return db.find(user);
-	} catch(Exception ex) {
-		throw new Exception("user %s does not exist".format(user));
-	}
+	auto db = PasswdDB.openro();
+	return db.find(user);
 }
 
 string getShadowPassword(string user) {
-	try {
-		return getspnam(user).password;
-	} catch(Exception ex) {
-		throw ex;
-		//throw new Exception("user %s does not exist".format(user));
-	}
+	return getspnam(user).password;
 }
