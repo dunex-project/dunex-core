@@ -63,7 +63,7 @@ subPackage {
     targetPath "out/"
     targetType "executable"
     sourcePaths "src/su"
-    dependency "dunex-auth" version="~>1.0.0"
+    dependency "dunex-auth" version="~master"
 }
 
 subPackage {
