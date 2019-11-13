@@ -3,6 +3,7 @@ project('dcore', 'd')
 executable('mkdir', 'src/mkdir/mkdir.d')
 executable('cksum', 'src/cksum/cksum.d')
 executable('wc', 'src/wc/wc.d')
+executable('hostname', 'src/hostname/hostname.d')
 
 # Done(-ish)
 executable('yes', 'src/yes/yes.d')

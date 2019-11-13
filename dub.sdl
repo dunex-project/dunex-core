@@ -26,6 +26,7 @@ dependency "dcore:seq" version="*"
 dependency "dcore:sleep" version="*"
 dependency "dcore:su" version="*"
 dependency "dcore:factor" version="*"
+dependency "dcore:hostname" version="*"
 
 // WIP
 
@@ -53,6 +54,13 @@ subPackage {
     sourcePaths "src/wc"
 }
 
+subPackage {
+	name "hostname"
+	targetName "hostname"
+	targetPath "out/"
+	targetType "executable"
+	sourcePaths "src/hostname"
+}
 
 
 

@@ -20,7 +20,7 @@ At current time the implementations are more like the FreeBSD core utilities.
 * unlink
 * seq
 * sleep
-* su (Clipsey is doing that)
+* su
 
 ## WIP ##
 
@@ -28,6 +28,7 @@ At current time the implementations are more like the FreeBSD core utilities.
 * cksum (doesn't work - algorithm isn't standard and implementation isn't correct).
 * wc (-c and -l work, of course, but the -L and -w counts are different from GNU version for unknown reasons).
 * factor (works for up to ulong length things but is a naive implementation that is slower than good implementations)
+* hostname
 
 ## Todo ##
 
@@ -64,7 +65,6 @@ At current time the implementations are more like the FreeBSD core utilities.
 * expand
 * pr
 * split
-* hostname
 * date
 * pwd
 * nice
