@@ -2,8 +2,6 @@ project('dcore', 'd')
 # WIP
 executable('mkdir', 'src/mkdir/mkdir.d')
 executable('cksum', 'src/cksum/cksum.d')
-executable('wc', 'src/wc/wc.d')
-executable('hostname', 'src/hostname/hostname.d')
 
 # Done(-ish)
 executable('yes', 'src/yes/yes.d')
@@ -23,3 +21,4 @@ executable('cut', 'src/cut/cut.d')
 executable('seq', 'src/seq/seq.d')
 executable('sleep', 'src/sleep/sleep.d')
 executable('factor', 'src/factor/factor.d')
+executable('wc', 'src/wc/wc.d')

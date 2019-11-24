@@ -1,5 +1,5 @@
 # DUNEX Core
-DUNEX Core contains a collection of mostly POSIX compliant core utilities written in D. 
+DUNEX Core contains a collection of mostly POSIX compliant core utilities written in D.
 At current time the implementations are more like the FreeBSD core utilities.
 
 
@@ -21,12 +21,14 @@ At current time the implementations are more like the FreeBSD core utilities.
 * seq
 * sleep
 * su
+* wc
 
 ## WIP ##
 
 * mkdir
 * cksum (doesn't work - algorithm isn't standard and implementation isn't correct).
-* wc (-c and -l work, of course, but the -L and -w counts are different from GNU version for unknown reasons).
+* deesh (this is a big ol project in itself)
+* su (Clipsey is doing that)
 * factor (works for up to ulong length things but is a naive implementation that is slower than good implementations)
 * hostname
 

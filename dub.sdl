@@ -47,25 +47,6 @@ subPackage {
 }
 
 subPackage {
-    name "wc"
-    targetName "wc"
-    targetPath "out/"
-    targetType "executable"
-    sourcePaths "src/wc"
-}
-
-subPackage {
-	name "hostname"
-	targetName "hostname"
-	targetPath "out/"
-	targetType "executable"
-	sourcePaths "src/hostname"
-}
-
-
-
-// Done(-ish)
-subPackage {
     name "su"
     targetName "su"
     targetPath "out/"
@@ -200,4 +181,12 @@ subPackage {
     targetPath "out/"
     targetType "executable"
     sourcePaths "src/factor"
+}
+
+subPackage {
+    name "wc"
+    targetName "wc"
+    targetPath "out/"
+    targetType "executable"
+    sourcePaths "src/wc"
 }
