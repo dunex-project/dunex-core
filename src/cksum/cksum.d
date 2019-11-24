@@ -54,20 +54,20 @@ int main(string[] args) {
 			}
 		}
 
-		// The standard requires the length, in little endian, appended to the data
-		// using the minimum number of bytes.
-		ubyte[8] lengthArray = cast(ubyte[8]) nativeToLittleEndian(length);
-		// trim length to minimum number of bytes
-		int lastidx = lengthArray.length - 1;
-		foreach_reverse (int i, j; lengthArray) {
-			if (j == 0) {
-				lastidx = i;
-			} else {
-				break;
-			}
-		}
-		crc.put(lengthArray[0 .. lastidx]);
-		writeln(format("%u %d %s", crc.hash(), length, args[1]));
-	}
-	return 0;
+    // The standard requires the length, in little endian, appended to the data
+    // using the minimum number of bytes.
+    ubyte[8] lengthArray = cast(ubyte[8])nativeToLittleEndian(length);
+    // trim length to minimum number of bytes
+    size_t lastidx = lengthArray.length - 1;
+    foreach_reverse(i, j; lengthArray) {
+      if (j == 0) {
+	lastidx = i;
+      }	else {
+	break;
+      }
+    }
+    crc.put(lengthArray[0..lastidx]);
+    writeln(format("%u %d %s", crc.hash(), length, args[1]));
+  }
+  return 0;
 }
