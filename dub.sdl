@@ -28,6 +28,7 @@ dependency "dcore:su" version="*"
 dependency "dcore:factor" version="*"
 dependency "dcore:hostname" version="*"
 dependency "dcore:nl" version="*"
+dependency "dcore:cat" version="*"
 
 // WIP
 
@@ -206,4 +207,12 @@ subPackage {
     targetPath "out/"
     targetType "executable"
     sourcePaths "src/nl"
+}
+
+subPackage {
+    name "cat"
+    targetName "cat"
+    targetPath "out/"
+    targetType "executable"
+    sourcePaths "src/cat"
 }
