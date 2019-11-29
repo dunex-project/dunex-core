@@ -23,3 +23,5 @@ executable('sleep', 'src/sleep/sleep.d')
 executable('factor', 'src/factor/factor.d')
 executable('wc', 'src/wc/wc.d')
 executable('su', 'src/su/su.d', dependencies: [dependency('dunex-auth', version: '~master', method: 'dub'), meson.get_compiler('c').find_library('crypt')])
+executable('cat', 'src/cat/cat.d')
+

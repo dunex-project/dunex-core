@@ -22,6 +22,7 @@ At current time the implementations are more like the FreeBSD core utilities.
 * sleep
 * su
 * wc
+* cat
 
 ## WIP ##
 
