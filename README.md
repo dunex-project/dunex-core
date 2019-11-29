@@ -27,80 +27,14 @@ At current time the implementations are more like the FreeBSD core utilities.
 
 * mkdir
 * cksum (doesn't work - algorithm isn't standard and implementation isn't correct).
-* deesh (this is a big ol project in itself)
 * su (Clipsey is doing that)
 * factor (works for up to ulong length things but is a naive implementation that is slower than good implementations)
 * hostname
 
 ## Todo ##
 
-* Generic core.sys.posix style wrappers for stdc that aren't already in there that we use.
-* Generic command boilerplate for --help, --verbose, --version on all commands. Also provide a way to specify filename(s) as part of the command line spec.
-* Generic IO / logging / error boilerplate
-* ls / vdir / dir
-* cp
-* mv
-* rm
-* rmdir
-* ln
-* chmod
-* chown
-* touch
-* dd
-* df
-* du
-* chroot
-* cat
-* head
-* tail
-* sort
-* tr
-* uniq
-* test
-* md5sum / shasum / etc.
-* base64 / base32
-* paste
-* join
-* comm
-* fmt
-* fold
-* expand
-* pr
-* split
-* date
-* pwd
-* nice
-* who
-* id
-* groups
-* whoami
-* env
-* install
-* link
-* mkfifo
-* mknod
-* shred
-* chgrp
-* expr
-* logname
-* nohup
-* patch
-* pinky
-* printenv
-* printf
-* stty
-* users
-* csplit
-* nl
-* od
-* ptx
-* sum
-* tac
+* See tickets in https://github.com/dunex-project/dunex-core/issues
+* Man pages for everything in markdown format
 * ... and anything else, see also: https://en.wikipedia.org/wiki/List_of_Unix_commands
-
-# Maybe ? #
-
 * i18n
-* deesh the D language shell. It should have its own simple shell scripting language maybe based on D syntax (or like something) but with pipes and whatnot.
-* a fully chrootable environment written in D.
-* init? inetd? full userland?! kernel!!!???
+* Translations / framework for translations

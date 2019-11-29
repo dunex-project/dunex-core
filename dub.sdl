@@ -112,6 +112,14 @@ subPackage {
 }
 
 subPackage {
+    name "hostname"
+    targetName "hostname"
+    targetPath "out/"
+    targetType "executable"
+    sourcePaths "src/hostname"
+}
+
+subPackage {
     name "unlink"
     targetName "unlink"
     targetPath "out/"
