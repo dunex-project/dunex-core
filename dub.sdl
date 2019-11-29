@@ -27,6 +27,7 @@ dependency "dcore:sleep" version="*"
 dependency "dcore:su" version="*"
 dependency "dcore:factor" version="*"
 dependency "dcore:hostname" version="*"
+dependency "dcore:nl" version="*"
 
 // WIP
 
@@ -197,4 +198,12 @@ subPackage {
     targetPath "out/"
     targetType "executable"
     sourcePaths "src/wc"
+}
+
+subPackage {
+    name "nl"
+    targetName "nl"
+    targetPath "out/"
+    targetType "executable"
+    sourcePaths "src/nl"
 }
