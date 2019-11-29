@@ -142,7 +142,7 @@ int main(string[] args) {
 
 		return 0;
 	} catch(Exception ex) {
-		stderr.writeln("su: ", ex.msg);
+		stderr.writeln(args[0], ": ", ex.msg);
 		return 1;
 	}
 }

@@ -1,4 +1,4 @@
-project('dcore', 'd')
+project('dcore', 'c', 'd')
 # WIP
 executable('mkdir', 'src/mkdir/mkdir.d')
 executable('cksum', 'src/cksum/cksum.d')
@@ -22,3 +22,4 @@ executable('seq', 'src/seq/seq.d')
 executable('sleep', 'src/sleep/sleep.d')
 executable('factor', 'src/factor/factor.d')
 executable('wc', 'src/wc/wc.d')
+executable('su', 'src/su/su.d', dependencies: [dependency('dunex-auth', version: '~master', method: 'dub'), meson.get_compiler('c').find_library('crypt')])
