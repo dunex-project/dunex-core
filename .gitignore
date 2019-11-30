@@ -4,4 +4,4 @@ out/
 dub.selections.json
 *~
 \#*
-
+*.a
