@@ -2,3 +2,6 @@ build/
 out/
 .dub/
 dub.selections.json
+*~
+\#*
+
