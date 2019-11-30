@@ -30,7 +30,22 @@ dependency "dcore:hostname" version="*"
 dependency "dcore:nl" version="*"
 dependency "dcore:cat" version="*"
 
+subPackage {
+   name "common"
+   sourcePaths "src/common"
+   targetType "library"
+}
+
 // WIP
+
+subPackage {
+    name "nl"
+    targetName "nl"
+    targetPath "out/"
+    targetType "executable"
+    sourcePaths "src/nl"
+    dependency "dcore:common" version="~master"
+}
 
 subPackage {
     name "mkdir"
@@ -175,6 +190,7 @@ subPackage {
     targetPath "out/"
     targetType "executable"
     sourcePaths "src/seq"
+    dependency "dcore:common" version="~master"
 }
 
 subPackage {
@@ -199,14 +215,6 @@ subPackage {
     targetPath "out/"
     targetType "executable"
     sourcePaths "src/wc"
-}
-
-subPackage {
-    name "nl"
-    targetName "nl"
-    targetPath "out/"
-    targetType "executable"
-    sourcePaths "src/nl"
 }
 
 subPackage {

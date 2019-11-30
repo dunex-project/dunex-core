@@ -2,6 +2,7 @@ project('dcore', 'd')
 # WIP
 executable('mkdir', 'src/mkdir/mkdir.d')
 executable('cksum', 'src/cksum/cksum.d')
+executable('nl', 'src/cat/nl.d')
 
 # Done(-ish)
 executable('yes', 'src/yes/yes.d')

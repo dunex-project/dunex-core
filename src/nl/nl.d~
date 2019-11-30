@@ -1,0 +1,72 @@
+/*
+	Copyright (c) 2019, DUNEX Contributors
+	Use, modification and distribution are subject to the
+	Boost Software License, Version 1.0.  (See accompanying file
+	COPYING or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+	Author(s): chaomodus
+	2019-11-28T23:45:00
+*/
+
+enum NL_VERSION = "nl from dunex-core 1.0\nAuthor(s): chaomodus";
+
+import std.conv;
+import std.getopt;
+import std.regex;
+import std.stdio;
+
+enum NMode { NONEMPTY, ALL, NONE, REGEX }
+
+void process_mode_arg(NMode *nmode, Regex!char *nregex, string value) {
+  if (value == "a")
+    *nmode = NMode.ALL;
+  else if (value == "t")
+    *nmode = NMode.NONEMPTY;
+  else if (value == "n")
+    *nmode = NMode.NONE;
+  else {
+    *nmode = NMode.REGEX;
+    *nregex = regex(value);
+  }
+}
+
+NMode bodyMode = NMode.NONEMPTY;
+Regex!char bodyRegex;
+NMode headerMode = NMode.NONE;
+Regex!char headerRegex;
+NMode footerMode = NMode.NONE;
+Regex!char footerRegex;
+
+string delimiter = "\t";
+
+int main(string[] args) {
+  auto helpInformation = getopt(args,
+				std.getopt.config.passThrough,
+				std.getopt.config.bundling,
+				std.getopt.config.caseSensitive,
+				"b|body", "Body numbering style", function void (string arg, string value) => process_mode_arg(&bodyMode, &bodyRegex, value),
+				"f|footer", "Footer numbering style", function void (string arg, string value) => process_mode_arg(&footerMode, &bodyRegex, value),
+				"h|header", "Header numbering style", function void (string arg, string value) => process_mode_arg(&headerMode, &headerRegex, value),
+				);
+  if (helpInformation.helpWanted) {
+    defaultGetoptPrinter("Show character, line, word counts.",
+			 helpInformation.options);
+    return 1;
+  }
+
+  enum state { body, header, footer }
+  state = state.body;
+  File input = stdin;
+  string line;
+  string cntprefix;
+  while (!input.eof) {
+    line = input.readln();
+    if (state == state.body) {
+
+    }
+    write(cntprefix, delimiter, line);
+  }
+
+
+  return 0;
+}

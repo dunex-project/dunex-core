@@ -11,56 +11,14 @@
 		Does not support full character escapes, just letter ones and \0.
  */
 
+import common.escapes;
+
 import std.array;
 import std.algorithm;
 import std.conv;
 import std.getopt;
 import std.format;
 import std.stdio;
-
-string decode_escapes(string inp) {
-	string ret;
-	char ch;
-	while (inp.length) {
-		ch = inp[0];
-		inp.popFront;
-		if (ch == '\\') {
-			ch = inp[0];
-			inp.popFront;
-			switch (ch) {
-			case 't':
-				ret ~= "\t";
-				break;
-			case '0':
-				ret ~= "\0";
-				break;
-			case 'a':
-				ret ~= "\a";
-				break;
-			case 'b':
-				ret ~= "\b";
-				break;
-			case 'f':
-				ret ~= "\f";
-				break;
-			case 'n':
-				ret ~= "\n";
-				break;
-			case 'r':
-				ret ~= "\r";
-				break;
-			case 'v':
-				ret ~= "\v";
-				break;
-			default:
-				ret ~= ch;
-			}
-		} else {
-			ret ~= ch;
-		}
-	}
-	return ret;
-}
 
 int main(string[] args) {
 	string fmt = "%g";
@@ -70,9 +28,9 @@ int main(string[] args) {
 	bool width;
 
 	auto helpInformation = getopt(args, std.getopt.config.passThrough,
-		"f|format", "Specify a printf format", &specfmt, 
-		"s|separator", "Specify the separator to place between each number.", &separator, 
-		"t|terminal", "Specify the terminating character to print.", &terminal, 
+		"f|format", "Specify a printf format", &specfmt,
+		"s|separator", "Specify the separator to place between each number.", &separator,
+		"t|terminal", "Specify the terminating character to print.", &terminal,
 		"w|width", "Pad numbers to maximum width.", &width
 	);
 
