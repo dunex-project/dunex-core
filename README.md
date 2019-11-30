@@ -31,6 +31,7 @@ At current time the implementations are more like the FreeBSD core utilities.
 * su (Clipsey is doing that)
 * factor (works for up to ulong length things but is a naive implementation that is slower than good implementations)
 * hostname
+* nl
 
 ## Todo ##
 
