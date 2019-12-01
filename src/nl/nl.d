@@ -39,6 +39,7 @@ string number_format = "%4d";
 bool norestart = false;
 size_t startnr = 1;
 size_t blank_lines = 1;
+string section_sep = "\:"
 
 void process_mode_arg(NMode *nmode, Regex!char *nregex, string value) {
   if (value == "a")
@@ -49,6 +50,7 @@ void process_mode_arg(NMode *nmode, Regex!char *nregex, string value) {
     *nmode = NMode.NONE;
   else {
     *nmode = NMode.REGEX;
+
     *nregex = regex(value);
   }
 }
@@ -78,7 +80,8 @@ int main(string[] args) {
 				  std.getopt.config.passThrough,
 				  std.getopt.config.bundling,
 				  std.getopt.config.caseSensitive,
-				  "b|body", "Body numbering style (a for all, t for non-empty, n for none, else a regular expression). Defaults to `t`.", function void (string arg, string value) => process_mode_arg(&bodyMode, &bodyRegex, value),
+				  "b|body", "Body numbering style (a for all, t for non-empty, n for none, else a regular expression). Defaults to `t`.",
+				  function void (string arg, string value) => process_mode_arg(&bodyMode, &bodyRegex, value),
 				  "f|footer", "Footer numbering style. Defaults to `n`.", function void (string arg, string value) => process_mode_arg(&footerMode, &bodyRegex, value),
 				  "h|header", "Header numbering style. Defaults to `n`.", function void (string arg, string value) => process_mode_arg(&headerMode, &headerRegex, value),
 				  "s|separator", "The character to place between the count and the line. Defaults to `\\t`", &delimiter,
