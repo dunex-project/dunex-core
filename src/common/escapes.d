@@ -17,7 +17,7 @@ import std.algorithm;
 import std.array;
 import std.string;
 
-string decode_escapes(string inp) {
+@safe pure string decode_escapes(string inp) {
 	string ret;
 	char ch;
 	while (inp.length) {

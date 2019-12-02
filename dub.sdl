@@ -1,4 +1,4 @@
-name "dcore"
+name "dunex-core"
 authors "Cas Rusnov" "Clipsey" "DUNEX Contributors"
 description "Reimplemention of coreutils in D"
 license "BSL-1.0"
@@ -6,29 +6,29 @@ copyright "Copyright © 2019, DUNEX Contributors"
 targetType "none"
 targetPath "out/"
 
-dependency "dcore:mkdir" version="*"
-dependency "dcore:cksum" version="*"
-dependency "dcore:wc" version="*"
-dependency "dcore:yes" version="*"
-dependency "dcore:tee" version="*"
-dependency "dcore:tty" version="*"
-dependency "dcore:echo" version="*"
-dependency "dcore:uname" version="*"
-dependency "dcore:return" version="*"
-dependency "dcore:hostid" version="*"
-dependency "dcore:unlink" version="*"
-dependency "dcore:sync" version="*"
-dependency "dcore:basename" version="*"
-dependency "dcore:dirname" version="*"
-dependency "dcore:tsort" version="*"
-dependency "dcore:cut" version="*"
-dependency "dcore:seq" version="*"
-dependency "dcore:sleep" version="*"
-dependency "dcore:su" version="*"
-dependency "dcore:factor" version="*"
-dependency "dcore:hostname" version="*"
-dependency "dcore:nl" version="*"
-dependency "dcore:cat" version="*"
+dependency "dunex-core:mkdir" version="*"
+dependency "dunex-core:cksum" version="*"
+dependency "dunex-core:wc" version="*"
+dependency "dunex-core:yes" version="*"
+dependency "dunex-core:tee" version="*"
+dependency "dunex-core:tty" version="*"
+dependency "dunex-core:echo" version="*"
+dependency "dunex-core:uname" version="*"
+dependency "dunex-core:return" version="*"
+dependency "dunex-core:hostid" version="*"
+dependency "dunex-core:unlink" version="*"
+dependency "dunex-core:sync" version="*"
+dependency "dunex-core:basename" version="*"
+dependency "dunex-core:dirname" version="*"
+dependency "dunex-core:tsort" version="*"
+dependency "dunex-core:cut" version="*"
+dependency "dunex-core:seq" version="*"
+dependency "dunex-core:sleep" version="*"
+dependency "dunex-core:su" version="*"
+dependency "dunex-core:factor" version="*"
+dependency "dunex-core:hostname" version="*"
+dependency "dunex-core:nl" version="*"
+dependency "dunex-core:cat" version="*"
 
 subPackage {
    name "common"
@@ -39,12 +39,21 @@ subPackage {
 // WIP
 
 subPackage {
+    name "ddate"
+    targetName "ddate"
+    targetPath "out/"
+    targetType "executable"
+    sourcePaths "src/ddate"
+    dependency "dunex-core:common" version="~master"
+}
+
+subPackage {
     name "nl"
     targetName "nl"
     targetPath "out/"
     targetType "executable"
     sourcePaths "src/nl"
-    dependency "dcore:common" version="~master"
+    dependency "dunex-core:common" version="~master"
 }
 
 subPackage {
@@ -190,7 +199,7 @@ subPackage {
     targetPath "out/"
     targetType "executable"
     sourcePaths "src/seq"
-    dependency "dcore:common" version="~master"
+    dependency "dunex-core:common" version="~master"
 }
 
 subPackage {
