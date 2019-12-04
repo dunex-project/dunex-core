@@ -56,7 +56,8 @@ int runApplication(string mod = __MODULE__)(string[] args, void delegate(Program
         string name = appInstance.name;
         string version_ = appInstance.version_;
         string capabilities = mixin(mod).APP_CAP.join(", ");
-        writeln("%s %s (%s)".format(name, version_, capabilities));
+        string authors = mixin(mod).APP_AUTHORS.join(", ");
+        writeln("%s %s (%s)\nWritten by: %s".format(name, version_, capabilities, authors));
         return 0;
     }
 
