@@ -34,6 +34,7 @@ subPackage {
    name "common"
    sourcePaths "src/common"
    targetType "library"
+   dependency "commandr" version="~>0.1.0"
 }
 
 // WIP
@@ -79,6 +80,8 @@ subPackage {
     targetType "executable"
     sourcePaths "src/su"
     dependency "dunex-auth" version="~master"
+    dependency "dunex-core:common" version="*"
+    stringImportPaths "."
 }
 
 subPackage {

@@ -7,13 +7,13 @@
 	su: open shell as an other user (generally root)
 	Author(s): Clipsey
 */
+module app;
 import core.sys.posix.termios;
 import core.sys.posix.unistd : STDIN_FILENO;
 
 import std.stdio;
 import std.string;
 import std.conv;
-import std.getopt;
 import std.format;
 import std.process;
 import std.array : split;
@@ -23,6 +23,7 @@ import dunex.auth.passwd;
 import dunex.auth.shadow;
 import dunex.auth.crypt;
 import dunex.auth.perms;
+import common.cmd;
 
 /**
 	The default PATH for normal user login
@@ -50,16 +51,36 @@ enum DEFAULT_USER = "root";
 enum DEFAULT_SHELL = "deesh";
 
 /**
+	App name
+*/
+enum APP_NAME = "su";
+
+/**
 	Help header format string
 */
-enum SU_HEADER_FMT = "Super User
+enum APP_DESC = "Super User
 Allows you to run an application as a different user (by default %s)
 ".format(DEFAULT_USER);
 
 /**
-	Version text
+	App version
 */
-enum SU_VERSION = "su from dunex core 1.0";
+enum APP_VERSION = "1.0 (dunex-core)";
+
+/**
+	Capabilities
+*/
+enum APP_CAP = ["su", "shadow"];
+
+/**
+	Authors
+*/
+enum APP_AUTHORS = ["Clipsey"];
+
+/**
+	License
+*/
+enum APP_LICENSE = import("COPYING");
 
 /*
 	Default options
@@ -77,9 +98,6 @@ bool loginShell;
 /// A command to run
 string command;
 
-/// The shell to use
-string useShell;
-
 /// Wether to show version info
 bool showVersionInfo;
 
@@ -87,71 +105,66 @@ bool showVersionInfo;
 bool showHelp;
 
 int main(string[] args) {
-	try {
-		string newUser = DEFAULT_USER;
 
-		auto helpInfo = getopt(args, std.getopt.config.passThrough,
-			"l|login", "", &loginShell,
-			"c|command", "Pass a single command to the shell", &command,
-			"f|fast", "Pass -f to the shell (for csh or tcsh)", &fastStartup,
-			"p|preserve-environment", "do not reset environment variables", &preserveEnvironment,
-			"s|shell", "run specified shell if /etc/shells allows it", &useShell,
-			"v|version", "show version info", &showVersionInfo
-		);
+	return runApplication(args, (Program app) {
+		app.add(new Flag("l", "login", "Execute as an log-in shell"));
+		app.add(new Option("c", "command", "Pass a single command to the shell"));
+		app.add(new Flag("f", "fast", "Pass -f to the shell (for csh or tcsh)"));
+		app.add(new Flag("p", "preserveenv", "Do not reset environment variables").full("preserve-environment"));
+		app.add(new Option("s", "shell", "Run specified shell if /etc/shells allows it"));
+		app.add(new Argument("user", "User to log in as (default %s)".format(DEFAULT_USER)).required(false));
 
-		if (helpInfo.helpWanted || showHelp) {
-			defaultGetoptPrinter(SU_HEADER_FMT, helpInfo.options);
+	}, (ProgramArgs args) {
+		try {
+			string newUser = DEFAULT_USER;
+			string newShell = DEFAULT_SHELL;
+
+			if (args.hasFlag("fast")) {
+				fastStartup = true;
+			}
+
+			if (args.hasFlag("preserveenv")) {
+				preserveEnvironment = true;
+			}
+
+			if (args.hasFlag("login")) {
+				loginShell = true;
+			}
+
+			if (args.option("user") !is null) {
+				newUser = args.option("user");
+			}
+
+			PasswdEntry pass = getPassword(newUser);
+			if (!verifyPassword(pass)) {
+				throw new Exception("incorrect password");
+			}
+
+			// Automatically use the shell the user prefers
+			// If such is specified in their user entry
+			// and if the user didn't specify a shell to use
+			// Otherwise the default shell will be used
+			if (args.option("shell") !is null) {
+				newShell = args.option("shell");
+			} else if (pass.shell.length != 0) {
+				newShell = pass.shell;
+			}
+
+			if (!newShell.isShellAllowed()) {
+				throw new Exception("shell %s not allowed".format(newShell));
+			}
+
+			// Change identity and environment to match new user
+			changeEnv(pass, newShell);
+			changeIdentity(pass);
+			runShell(newShell, args.option("command"));
+
+			return 0;
+		} catch(Exception ex) {
+			stderr.writeln("su: ", ex.msg);
 			return 1;
 		}
-
-		if (showVersionInfo) {
-			writeln(buildVersionText);
-			return 0;
-		}
-
-		// Select user via first argument that isn't an option
-		if (args.length >= 2) {
-			newUser = args[1];
-		}
-
-
-		PasswdEntry pass = getPassword(newUser);
-		if (!verifyPassword(pass)) {
-			throw new Exception("incorrect password");
-		}
-
-		// Automatically use the shell the user prefers
-		// If such is specified in their user entry
-		// and if the user didn't specify a shell to use
-		// Otherwise the default shell will be used
-		string shell = pass.shell;
-		if (shell.length != 0 && useShell.length == 0) {
-			useShell = shell;
-		} else if (useShell.length == 0) {
-			useShell = DEFAULT_SHELL;
-		}
-
-		if (!isShellAllowed(useShell)) {
-			throw new Exception("shell %s not allowed".format(useShell));
-		}
-
-		// Change identity and environment to match new user
-		changeEnv(pass, useShell);
-		changeIdentity(pass);
-		runShell(useShell, command);
-
-		return 0;
-	} catch(Exception ex) {
-		stderr.writeln("su: ", ex.msg);
-		return 1;
-	}
-}
-
-/**
-	Builds the version text with capabilities listed
-*/
-string buildVersionText() {
-	return "%s".format(SU_VERSION);
+	});
 }
 
 /**
