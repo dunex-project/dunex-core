@@ -236,3 +236,11 @@ subPackage {
     targetType "executable"
     sourcePaths "src/cat"
 }
+
+subPackage {
+     name "uniq"
+     targetName "uniq"
+     targetPath "out/"
+     targetType "executable"
+     sourcePaths "src/uniq"
+}
