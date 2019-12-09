@@ -8,6 +8,7 @@ common = dependency('dunex-core:common', method: 'dub')
 executable('mkdir', 'src/mkdir/mkdir.d')
 executable('cksum', 'src/cksum/cksum.d')
 executable('nl', 'src/nl/nl.d', dependencies: [common, commandr])
+executable('uniq', 'src/uniq/uniq.d', dependencies: [common, commandr])
 
 # Done(-ish)
 executable('su', 'src/su/su.d', dependencies: [auth, meson.get_compiler('c').find_library('crypt'), commandr, common])

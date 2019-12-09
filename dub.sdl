@@ -247,4 +247,6 @@ subPackage {
      targetPath "out/"
      targetType "executable"
      sourcePaths "src/uniq"
+     dependency "dunex-core:common" version="*"
+     stringImportPaths "."
 }

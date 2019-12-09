@@ -10,64 +10,62 @@
 
 */
 
-enum AUTHORS = "chaomodus";
-enum VERSION = "0.0.0";
-enum PROGRAM = "uniq";
-enum SUMMARY = "filter out repeated lines in an input file";
-
-import std.getopt;
 import std.format;
 import std.stdio;
 import std.string;
 
+import common.cmd;
+
+enum APP_NAME = "uniq";
+enum APP_DESC = "Manipulate repeated lines in input";
+enum APP_VERSION = "1.0 (dunex-core)";
+enum APP_AUTHORS = ["chaomodus"];
+enum APP_LICENSE = import("COPYING");
+enum APP_CAP = ["uniq"];
+
 int main(string[] args) {
-  bool option_count = false;
-  bool option_onlyrepeats = false;
-  bool option_notrepeats = false;
-  bool option_case_insensitive = false;
+  try {
+    return runApplication(args, (Program app) {
+	app.add(new Argument("input", "The path to take input from (default is -, which means stdin)").defaultValue("-"));
+	app.add(new Argument("output", "The path to return output to").defaultValue("-"));
+	app.add(new Flag("c", "count", "Show the number of times each line repeats."));
+	app.add(new Flag("d", "onlyrepeats", "Only show lines that have one or more repeats."));
+	app.add(new Flag("u", "norepeats", "Only show lines that do not have repeats."));
+	app.add(new Flag("i", "insensitive", "Compare lines case-insensitively."));
+	app.add(new Option("f", "fieldskip", "Skip n blank-delimited fields.").defaultValue("0"));
+	app.add(new Option("s", "charskip", "Skip n characters before comparing lines. Applied after field skip.").defaultValue("0"));
+      },
+      (ProgramArgs args) {
+	string lastline;
+	string line;
+	uint lastline_count = 1;
+	while (!stdin.eof) {
+	  line = stdin.readln();
 
-  uint option_fieldskip = 0;
-  uint option_charskip = 0;
+	  if (args.flag("insensitive"))
+	    line = line.toLower();
 
-  auto helpInformation = getopt(args,
-				std.getopt.config.passThrough,
-				std.getopt.config.bundling,
-				std.getopt.config.caseSensitive,
-				"c|count", "Show the number of times each line is repeated.", &option_count,
-				"d|onlyrepeats", "Only show lines that have one or more repeat.", &option_onlyrepeats,
-				"u|norepeats", "Only show lines that do not have repeats.", &option_notrepeats,
-				"i|case-insensitive", "Compare lines case-insensitively.", &option_case_insensitive,
-				"f|fieldskip", "Skip n fields (blank deliminated tokens) before comparing lines.", &option_fieldskip,
-				"s|charskip", "Skip n characters before comparing lines. This is applied after any field skip.", &option_charskip,
-				);
-  if (helpInformation.helpWanted) {
-    defaultGetoptPrinter(format("%s: %s (version: %s)\n", args[0], SUMMARY, VERSION),
-			 helpInformation.options);
+	  if (lastline == line)
+	    lastline_count += 1;
+	  else {
+	    lastline_count = 1;
+	  }
+	  lastline = line;
+
+	  if (line) {
+	    if (args.flag("count"))
+	      {
+		writeln(lastline_count, " ", line[0..$-1]);
+	      }
+	    else {
+	      writeln(line);
+	    }
+	  }
+	}
+	return 0;
+      });
+  } catch(Exception ex) {
+    stderr.writeln(APP_NAME, ": ", ex.msg);
     return 1;
   }
-
-  string lastline;
-  string line;
-  uint lastline_count = 1;
-  while (!stdin.eof) {
-    line = stdin.readln();
-
-    if (option_case_insensitive)
-      line = line.toLower();
-
-    if (lastline == line)
-      lastline_count += 1;
-    else {
-      lastline_count = 1;
-    }
-    lastline = line;
-
-    if (line)
-      if (option_count)
-	writeln(lastline_count, " ", line[0..$-1]);
-      else
-	writeln(line);
-  }
-
-  return 0;
 }
