@@ -146,6 +146,8 @@ subPackage {
     targetPath "out/"
     targetType "executable"
     sourcePaths "src/hostname"
+    dependency "dunex-core:common" version="*"
+    stringImportPaths "."
 }
 
 subPackage {
@@ -178,6 +180,8 @@ subPackage {
     targetPath "out/"
     targetType "executable"
     sourcePaths "src/dirname"
+    dependency "dunex-core:common" version="*"
+    stringImportPaths "."
 }
 
 subPackage {

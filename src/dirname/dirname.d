@@ -8,16 +8,35 @@
 	Author(s): chaomodus
 */
 
+module app;
+
 import std.path : dirName;
 import std.stdio;
 
+import common.cmd;
+
+enum APP_NAME = "hostname";
+enum APP_DESC = "Print directory part of specified path.";
+enum APP_VERSION = "1.0 (dunex-core)";
+enum APP_AUTHORS = ["chaomodus"];
+enum APP_LICENSE = import("COPYING");
+enum APP_CAP = ["dirname"];
+
 int main(string[] args) {
-	if (args.length < 2) {
-		writeln(args[0], ": specify at least one path");
-		return 1;
-	}
-	foreach (path; args[1 .. $]) {
-		writeln(dirName(path));
-	}
-	return 0;
+  try {
+  return runApplication(args, (Program app) {
+      app.add(new Argument("path", "the path(s) to print the directory part of").optional.repeating);
+    },
+    (ProgramArgs args) {
+      if (args.args("path").length == 0)
+	throw new Exception("specify at least one path");
+      foreach (path; args.args("path")) {
+	writeln(dirName(path));
+      }
+      return 0;
+    });
+  } catch(Exception ex) {
+    stderr.writeln(APP_NAME, ": ", ex.msg);
+    return 1;
+  }
 }

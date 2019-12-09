@@ -57,9 +57,9 @@ int main(string[] args) {
 
     if (lastline == line)
       lastline_count += 1;
-    else
+    else {
       lastline_count = 1;
-
+    }
     lastline = line;
 
     if (line)
