@@ -2,6 +2,9 @@
 DUNEX Core contains a collection of mostly POSIX compliant core utilities written in D.
 At current time the implementations are more like the FreeBSD core utilities.
 
+## Compiling ##
+
+Either `dub build` to use dub or `./build.sh` to use meson.
 
 ## Done ##
 

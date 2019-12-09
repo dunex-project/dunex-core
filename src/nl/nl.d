@@ -39,7 +39,7 @@ string number_format = "%4d";
 bool norestart = false;
 size_t startnr = 1;
 size_t blank_lines = 1;
-string section_sep = "\:"
+string section_sep = "\\:";
 
 void process_mode_arg(NMode *nmode, Regex!char *nregex, string value) {
   if (value == "a")

@@ -13,6 +13,8 @@
 	* needs to support numeric character specifiers.
 */
 
+module escapes;
+
 import std.algorithm;
 import std.array;
 import std.string;
