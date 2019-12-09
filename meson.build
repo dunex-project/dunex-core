@@ -4,7 +4,6 @@ auth = dependency('dunex-auth', method: 'dub')
 commandr = dependency('commandr', method: 'dub')
 common = dependency('dunex-core:common', method: 'dub')
 
-
 # Wip
 executable('mkdir', 'src/mkdir/mkdir.d')
 executable('cksum', 'src/cksum/cksum.d')
