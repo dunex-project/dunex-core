@@ -6,7 +6,11 @@ At current time the implementations are more like the FreeBSD core utilities.
 
 Either `dub build` to use dub or `./build.sh` to use meson.
 
-## Done ##
+## Done and Documented with a manpage ##
+
+* dirname (1dunex)
+
+## (Mostly) Done ##
 
 * yes
 * tee
@@ -18,7 +22,6 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 * sync
 * basename
 * tsort
-* dirname
 * cut (extends functionality in useful ways that are substantially better than gnu version).
 * unlink
 * seq
@@ -26,6 +29,7 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 * su
 * wc
 * cat
+* nl (missing a weird little feature but should be easy to implement)
 
 ## WIP ##
 
@@ -34,7 +38,6 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 * su (Clipsey is doing that)
 * factor (works for up to ulong length things but is a naive implementation that is slower than good implementations)
 * hostname
-* nl
 * ddate
 
 ## Todo ##
