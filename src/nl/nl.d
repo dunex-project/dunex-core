@@ -88,17 +88,17 @@ NState is_section_delimiter(string line, string delim) {
 int main(string[] args) {
   try {
     return runApplication(args, (Program app) {
-	app.add(new Option("b", "body", "Body numbering style (a for all, t for non-empty, n for none, else a regular expression.").defaultValue("t"));
-	app.add(new Option("f", "footer", "Footer numbering style, as above.").defaultValue("n"));
-	app.add(new Option("r", "header", "Header numbering style, as above.").defaultValue("n"));
-	app.add(new Option("s", "separator", "The character to place between the count and the line. Defaults to '\\t'").defaultValue("\t"));
+	app.add(new Option("b", "body", "Body numbering style (a for all, t for non-empty, n for none, else a regular expression) Default: t.").defaultValue("t"));
+	app.add(new Option("f", "footer", "Footer numbering style, as above. Default: n").defaultValue("n"));
+	app.add(new Option("r", "header", "Header numbering style, as above. Default: n").defaultValue("n"));
+	app.add(new Option("s", "separator", "The character to place between the count and the line. Default: '\\t'").defaultValue("\t"));
 	app.add(new Option("i", "incr", "The number to increment per line counted.").defaultValue("1"));
-	app.add(new Option("n", "format", "POSIX-style format specifier (ln for left justified, rn for right justfied, rz for right just 0 padded). Defaults to `ln`").acceptsValues(["ln", "rn", "rz"]).defaultValue("rn"));
+	app.add(new Option("n", "format", "POSIX-style format specifier (ln for left justified, rn for right justfied, rz for right just 0 padded). Default: rn").acceptsValues(["ln", "rn", "rz"]).defaultValue("rn"));
 	app.add(new Option("w", "width", "Specify the width of the number column.").defaultValue("6"));
 	app.add(new Option("v", "startnum", "Specify the number to start with when numbering lines in a page.").defaultValue("1"));
-	app.add(new Option("l", "blanklines", "Specify the number of blank lines to count as one blank line in 'n' mode.").defaultValue("1"));
+	// app.add(new Option("l", "blanklines", "Specify the number of blank lines to count as one blank line in 'n' mode.").defaultValue("1"));
 	app.add(new Option(null, "countformat", "Specify the C-style format to use to print the line numbers."));
-	app.add(new Option("d", "delim", "Specify the section delimiter.").defaultValue("::"));
+	app.add(new Option("d", "delim", "Specify the section delimiter. Default: ::").defaultValue("::"));
 	app.add(new Flag("p", "nopagerestart", "Don't restart numbering on a logical page change."));
 	app.add(new Flag(null, "leftalign", "Specify that the line number should be left aligned."));
       },
