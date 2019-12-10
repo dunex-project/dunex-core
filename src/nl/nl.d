@@ -8,7 +8,7 @@
 	2019-11-28T23:45:00
 
 	TODO:
-	  Does not support pagination, headers, footers. Need to add argument to specify the pagination indicator character.
+	  blank line folding
 */
 
 module app;
@@ -30,6 +30,7 @@ enum APP_LICENSE = import("COPYING");
 enum APP_CAP = [APP_NAME];
 
 enum NMode { NONEMPTY, ALL, NONE, REGEX }
+enum NState { BODY, HEADER, FOOTER, NONE }
 
 bool left_align;
 uint number_width;
@@ -70,12 +71,26 @@ string format_number(bool ljust, string fmt, uint width, size_t number) {
   return rightJustify(format(fmt, number), width);
 }
 
+NState is_section_delimiter(string line, string delim) {
+  if (!line.startsWith(delim))
+    return NState.NONE;
+
+  if (line == delim ~ "\n")
+    return NState.FOOTER;
+  if (line == delim ~ delim ~ "\n")
+    return NState.BODY;
+  if (line == delim ~ delim ~ delim ~ "\n")
+    return NState.HEADER;
+
+  return NState.NONE;
+}
+
 int main(string[] args) {
   try {
     return runApplication(args, (Program app) {
 	app.add(new Option("b", "body", "Body numbering style (a for all, t for non-empty, n for none, else a regular expression.").defaultValue("t"));
 	app.add(new Option("f", "footer", "Footer numbering style, as above.").defaultValue("n"));
-	app.add(new Option("d", "header", "Header numbering style, as above.").defaultValue("n"));
+	app.add(new Option("r", "header", "Header numbering style, as above.").defaultValue("n"));
 	app.add(new Option("s", "separator", "The character to place between the count and the line. Defaults to '\\t'").defaultValue("\t"));
 	app.add(new Option("i", "incr", "The number to increment per line counted.").defaultValue("1"));
 	app.add(new Option("n", "format", "POSIX-style format specifier (ln for left justified, rn for right justfied, rz for right just 0 padded). Defaults to `ln`").acceptsValues(["ln", "rn", "rz"]).defaultValue("rn"));
@@ -83,6 +98,7 @@ int main(string[] args) {
 	app.add(new Option("v", "startnum", "Specify the number to start with when numbering lines in a page.").defaultValue("1"));
 	app.add(new Option("l", "blanklines", "Specify the number of blank lines to count as one blank line in 'n' mode.").defaultValue("1"));
 	app.add(new Option(null, "countformat", "Specify the C-style format to use to print the line numbers."));
+	app.add(new Option("d", "delim", "Specify the section delimiter.").defaultValue("::"));
 	app.add(new Flag("p", "nopagerestart", "Don't restart numbering on a logical page change."));
 	app.add(new Flag(null, "leftalign", "Specify that the line number should be left aligned."));
       },
@@ -98,14 +114,14 @@ int main(string[] args) {
 	process_mode_arg(&bodyMode, &bodyRegex, args.option("body"));
 	process_mode_arg(&footerMode, &footerRegex, args.option("footer"));
 	process_mode_arg(&headerMode, &headerRegex, args.option("header"));
-	string delimiter = decode_escapes(args.option("separator"));
+	string separator = decode_escapes(args.option("separator"));
 	bool norestart = args.flag("nopagerestart");
 	if (args.flag("leftalign"))
 	  left_align = true;
 	size_t startnr = to!size_t(args.option("startnum"));
 	size_t blank_lines = to!size_t(args.option("blanklines"));
 	uint incr = to!uint(args.option("incr"));
-	string section_sep = "\\:";
+	string delimiter = args.option("delim");
 	number_width = to!uint(args.option("width"));
  	process_oldstyle(args.option("format"));
 	// count-format overrides many of the above
@@ -118,33 +134,48 @@ int main(string[] args) {
 	size_t headercnt = 0;
 	bodycnt = startnr - 1;
 
-	enum state {
-		    BODY,
-		    HEADER,
-		    FOOTER
-	}
-	state readstate = state.BODY;
+	NState readNState = NState.BODY;
+	NState nextNState;
 	File input = stdin;
 	string line;
 	string cntprefix;
 
 	while (!input.eof) {
 	  line = input.readln();
-	  if (readstate == state.BODY) {
+	  nextNState = is_section_delimiter(line, delimiter);
+	  if (nextNState != NState.NONE) {
+	    readNState = nextNState;
+	    footercnt = 0;
+	    headercnt = 0;
+	    if ((nextNState == NState.BODY) && !norestart)
+	      bodycnt = 0;
+	    continue;
+	  }
+	  if (readNState == NState.BODY) {
 	    if ((bodyMode == NMode.ALL) || ((bodyMode == NMode.NONEMPTY) && line.strip().length > 0) || ((bodyMode == NMode.REGEX) && (line.match(bodyRegex)))) {
 	      bodycnt += incr;
 	      cntprefix = format_number(left_align, number_format, number_width, bodycnt);
 	    }
 	    else
 	      cntprefix = "";
-	  } else if (readstate == state.FOOTER) {
-	    footercnt += 1;
+	  } else if (readNState == NState.FOOTER) {
+	    if ((footerMode == NMode.ALL) || ((footerMode == NMode.NONEMPTY) && line.strip().length > 0) || ((footerMode == NMode.REGEX) && (line.match(footerRegex)))) {
+	      footercnt += incr;
+	      cntprefix = format_number(left_align, number_format, number_width, footercnt);
+	    }
+	    else
+	      cntprefix = "";
 	  } else {
-	    headercnt += 1;
+	    if ((headerMode == NMode.ALL) || ((headerMode == NMode.NONEMPTY) && line.strip().length > 0) || ((headerMode == NMode.REGEX) && (line.match(headerRegex)))) {
+	      headercnt += incr;
+	      cntprefix = format_number(left_align, number_format, number_width, headercnt);
+	    }
+	    else
+	      cntprefix = "";
 	  }
 	  if (input.eof || !line)
 	    continue;
-	  write(cntprefix, delimiter, line);
+	  write(cntprefix, separator, line);
 	}
 	return 0;
       });
