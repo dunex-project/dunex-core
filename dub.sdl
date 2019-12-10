@@ -55,6 +55,7 @@ subPackage {
     targetType "executable"
     sourcePaths "src/nl"
     dependency "dunex-core:common" version="~master"
+    stringImportPaths "."
 }
 
 subPackage {

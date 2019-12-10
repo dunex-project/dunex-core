@@ -11,35 +11,29 @@
 	  Does not support pagination, headers, footers. Need to add argument to specify the pagination indicator character.
 */
 
-enum NL_VERSION = "nl from dunex-core 1.0\nAuthor(s): chaomodus";
-
-import common.escapes;
+module app;
 
 import std.conv;
 import std.format;
-import std.getopt;
 import std.regex;
 import std.stdio;
 import std.string;
 
+import common.cmd;
+import common.escapes;
+
+enum APP_NAME = "nl";
+enum APP_DESC = "Print line numbers";
+enum APP_VERSION = "1.0 (dunex-core)";
+enum APP_AUTHORS = ["chaomodus"];
+enum APP_LICENSE = import("COPYING");
+enum APP_CAP = [APP_NAME];
+
 enum NMode { NONEMPTY, ALL, NONE, REGEX }
 
-NMode bodyMode = NMode.NONEMPTY;
-Regex!char bodyRegex;
-NMode headerMode = NMode.NONE;
-Regex!char headerRegex;
-NMode footerMode = NMode.NONE;
-Regex!char footerRegex;
-string delimiter = "\t";
-bool left_align = false;
-uint incr = 1;
-string option_numfmt = "";
-uint number_width = 6;
-string number_format = "%4d";
-bool norestart = false;
-size_t startnr = 1;
-size_t blank_lines = 1;
-string section_sep = "\\:";
+bool left_align;
+uint number_width;
+string number_format;
 
 void process_mode_arg(NMode *nmode, Regex!char *nregex, string value) {
   if (value == "a")
@@ -55,16 +49,18 @@ void process_mode_arg(NMode *nmode, Regex!char *nregex, string value) {
   }
 }
 
-void process_oldstyle(string param, string value) {
+void process_oldstyle(string value) {
   if (value == "ln") {
     left_align = true;
     number_format = "%d";
   } else if (value == "rn") {
+    left_align = false;
     number_format = format("%%%dd", number_width);
   } else if (value == "rz") {
+    left_align = false;
     number_format = format("%%0%dd", number_width);
   } else {
-    throw new GetOptException("invalid line numbering format: must be ln, rn, rz");
+    throw new Exception("invalid line numbering format: must be ln, rn, rz");
   }
 }
 
@@ -76,72 +72,84 @@ string format_number(bool ljust, string fmt, uint width, size_t number) {
 
 int main(string[] args) {
   try {
-    auto helpInformation = getopt(args,
-				  std.getopt.config.passThrough,
-				  std.getopt.config.bundling,
-				  std.getopt.config.caseSensitive,
-				  "b|body", "Body numbering style (a for all, t for non-empty, n for none, else a regular expression). Defaults to `t`.",
-				  function void (string arg, string value) => process_mode_arg(&bodyMode, &bodyRegex, value),
-				  "f|footer", "Footer numbering style. Defaults to `n`.", function void (string arg, string value) => process_mode_arg(&footerMode, &bodyRegex, value),
-				  "h|header", "Header numbering style. Defaults to `n`.", function void (string arg, string value) => process_mode_arg(&headerMode, &headerRegex, value),
-				  "s|separator", "The character to place between the count and the line. Defaults to `\\t`", &delimiter,
-				  "i|incr", "The number to increment per line counted.", &incr,
-				  "n|format", "POSIX-style format specifier (ln for left justified, rn for right justfied, rz for right just 0 padded). Defaults to `ln`", &process_oldstyle,
-				  "p|no-page-restart", "Don't restart numbering on a logical page change.", &norestart,
-				  "w|width", "Specify the width of the line number column. Defaults to `6`.", &number_width,
-				  "v|startnum", "Specify the number to start when numbering lines in a page. Defaults to `1`.", &startnr,
-				  "l|blank-lines", "Specify the number of blank lines to count as one blank line in `n` mode. Defaults to `1`.", &blank_lines,
-				  "count-format", "The C-string style format to use to print the line numbers (default is %4d).", &option_numfmt,
-				  "left-align", "Specify that the line number should be left aligned.", &left_align,
-				  );
-    if (helpInformation.helpWanted) {
-      defaultGetoptPrinter(format("%s: print input with line numbers prepended.", args[0]),
-			   helpInformation.options);
-      return 1;
-    }
-  }
-  catch (GetOptException e) {
-    writeln(args[0], ": bad argument: ", e.msg);
-    writeln("Try ", args[0], " --help for more information.");
+    return runApplication(args, (Program app) {
+	app.add(new Option("b", "body", "Body numbering style (a for all, t for non-empty, n for none, else a regular expression.").defaultValue("t"));
+	app.add(new Option("f", "footer", "Footer numbering style, as above.").defaultValue("n"));
+	app.add(new Option("d", "header", "Header numbering style, as above.").defaultValue("n"));
+	app.add(new Option("s", "separator", "The character to place between the count and the line. Defaults to '\\t'").defaultValue("\t"));
+	app.add(new Option("i", "incr", "The number to increment per line counted.").defaultValue("1"));
+	app.add(new Option("n", "format", "POSIX-style format specifier (ln for left justified, rn for right justfied, rz for right just 0 padded). Defaults to `ln`").acceptsValues(["ln", "rn", "rz"]).defaultValue("rn"));
+	app.add(new Option("w", "width", "Specify the width of the number column.").defaultValue("6"));
+	app.add(new Option("v", "startnum", "Specify the number to start with when numbering lines in a page.").defaultValue("1"));
+	app.add(new Option("l", "blanklines", "Specify the number of blank lines to count as one blank line in 'n' mode.").defaultValue("1"));
+	app.add(new Option(null, "countformat", "Specify the C-style format to use to print the line numbers."));
+	app.add(new Flag("p", "nopagerestart", "Don't restart numbering on a logical page change."));
+	app.add(new Flag(null, "leftalign", "Specify that the line number should be left aligned."));
+      },
+      (ProgramArgs args) {
+	// Process arguments
+	NMode bodyMode = NMode.NONEMPTY;
+	Regex!char bodyRegex;
+	NMode headerMode = NMode.NONE;
+	Regex!char headerRegex;
+	NMode footerMode = NMode.NONE;
+	Regex!char footerRegex;
+
+	process_mode_arg(&bodyMode, &bodyRegex, args.option("body"));
+	process_mode_arg(&footerMode, &footerRegex, args.option("footer"));
+	process_mode_arg(&headerMode, &headerRegex, args.option("header"));
+	string delimiter = decode_escapes(args.option("separator"));
+	bool norestart = args.flag("nopagerestart");
+	if (args.flag("leftalign"))
+	  left_align = true;
+	size_t startnr = to!size_t(args.option("startnum"));
+	size_t blank_lines = to!size_t(args.option("blanklines"));
+	uint incr = to!uint(args.option("incr"));
+	string section_sep = "\\:";
+	number_width = to!uint(args.option("width"));
+ 	process_oldstyle(args.option("format"));
+	// count-format overrides many of the above
+	if (args.option("countformat"))
+	  number_format = args.option("countformat");
+	// Done with args.
+
+	size_t bodycnt;
+	size_t footercnt = 0;
+	size_t headercnt = 0;
+	bodycnt = startnr - 1;
+
+	enum state {
+		    BODY,
+		    HEADER,
+		    FOOTER
+	}
+	state readstate = state.BODY;
+	File input = stdin;
+	string line;
+	string cntprefix;
+
+	while (!input.eof) {
+	  line = input.readln();
+	  if (readstate == state.BODY) {
+	    if ((bodyMode == NMode.ALL) || ((bodyMode == NMode.NONEMPTY) && line.strip().length > 0) || ((bodyMode == NMode.REGEX) && (line.match(bodyRegex)))) {
+	      bodycnt += incr;
+	      cntprefix = format_number(left_align, number_format, number_width, bodycnt);
+	    }
+	    else
+	      cntprefix = "";
+	  } else if (readstate == state.FOOTER) {
+	    footercnt += 1;
+	  } else {
+	    headercnt += 1;
+	  }
+	  if (input.eof || !line)
+	    continue;
+	  write(cntprefix, delimiter, line);
+	}
+	return 0;
+      });
+  } catch(Exception ex) {
+    stderr.writeln(APP_NAME, ": ", ex.msg);
     return 1;
   }
-
-  delimiter = decode_escapes(delimiter);
-
-  size_t bodycnt;
-  size_t footercnt = 0;
-  size_t headercnt = 0;
-  bodycnt = startnr - 1;
-
-  enum state {
-	      BODY,
-	      HEADER,
-	      FOOTER
-  }
-  state readstate = state.BODY;
-  File input = stdin;
-  string line;
-  string cntprefix;
-
-  while (!input.eof) {
-    line = input.readln();
-    if (readstate == state.BODY) {
-      if ((bodyMode == NMode.ALL) || ((bodyMode == NMode.NONEMPTY) && line.strip().length > 0) || ((bodyMode == NMode.REGEX) && (line.match(bodyRegex)))) {
-	bodycnt += incr;
-	cntprefix = format_number(left_align, number_format, number_width, bodycnt);
-      }
-      else
-	cntprefix = "";
-    } else if (readstate == state.FOOTER) {
-      footercnt += 1;
-    } else {
-      headercnt += 1;
-    }
-    if (input.eof || !line)
-      continue;
-    write(cntprefix, delimiter, line);
-  }
-
-
-  return 0;
 }
