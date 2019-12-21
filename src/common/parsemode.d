@@ -45,7 +45,7 @@ mode_t parse_mode(const string[] mode_spec, mode_t base_mode = 420) {
     }
     else {
       auto m = token.matchFirst(symbolic_mode_regex);
-      if (!m || m.pre || m.post) {
+      if (!m || m.pre.length > 0 || m.post.length > 0) {
 	throw new PermParseException("bad mode specifier " ~ token);
       }
       bool sid = false;
@@ -119,13 +119,18 @@ mode_t parse_mode(const string[] mode_spec, mode_t base_mode = 420) {
       }
     }
   }
-  return cast(mode_t)mode;
+  return mode;
 }
 
 unittest {
   import parsemode;
+  import std.stdio;
 
-  assert(parse_mode(["0644"], 0) == 420);
-  assert(parse_mode(["0644", "000"]) == 0);
+  assert(parse_mode(["0644"], 0) == 420); // if base is 0, 0644 should be 420 dec.
+  assert(parse_mode(["0644", "000"]) == 0); // it should apply the perms in order
   assert(parse_mode(["0000"]) == 0);
+  assert(parse_mode(["a+x"], 420) == 493); // add +x to all three perm groups
+  assert(parse_mode(["o=rx", "u+rw"], 0) == 389);
+  assert(parse_mode(["o=rx", "u+rw"]) == 389); // = operator should overwrite bits on base mode
+  assert(parse_mode(["+x"]) == parse_mode(["a+x"]));
 }
