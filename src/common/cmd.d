@@ -19,7 +19,7 @@ public import commandr;
         enum APP_LICENSE = import("res/LICENSE");
 
         int main(string[] args) {
-            return runApplication(args, 
+            return runApplication(args,
                 (Program app) {
                     // Add arguments
                 },
@@ -74,4 +74,10 @@ int runApplication(string mod = __MODULE__)(string[] args, void delegate(Program
     }
 
     return exec(argInstance);
+}
+
+@safe unittest {
+  import commond.cmd;
+
+  assert(true);
 }

@@ -27,3 +27,9 @@ import std.format;
 
   return format("%d%s", n, suffixes[ord]);
 }
+
+@safe unittest {
+  import common.ordinal;
+
+  assert(true);
+}
