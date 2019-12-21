@@ -1,3 +1,4 @@
+module cmd;
 import commandr;
 import std.format;
 import std.array : join;
@@ -76,8 +77,6 @@ int runApplication(string mod = __MODULE__)(string[] args, void delegate(Program
     return exec(argInstance);
 }
 
-@safe unittest {
-  import commond.cmd;
-
+unittest {
   assert(true);
 }

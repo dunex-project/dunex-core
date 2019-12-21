@@ -12,7 +12,7 @@
 	TODO:
 	  Support localization (this is completely different in non-English languages).
 */
-
+module ordinal;
 import std.format;
 
 @safe toOrdinal(long n) {
@@ -28,8 +28,6 @@ import std.format;
   return format("%d%s", n, suffixes[ord]);
 }
 
-@safe unittest {
-  import common.ordinal;
-
+unittest {
   assert(true);
 }

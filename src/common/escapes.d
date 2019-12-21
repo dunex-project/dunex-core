@@ -63,8 +63,6 @@ import std.string;
 	return ret;
 }
 
-@safe unittest {
-  import common.escapes;
-
+unittest {
   assert(decode_escapes("\\n") == "\n");
 }

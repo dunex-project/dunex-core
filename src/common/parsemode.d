@@ -10,6 +10,7 @@
 	This implements translating file mode specifiers into mode_t
 
 */
+module parsemode;
 
 import std.conv;
 import std.regex;
@@ -121,8 +122,8 @@ mode_t parse_mode(const string[] mode_spec, mode_t base_mode = 420) {
   return cast(mode_t)mode;
 }
 
-@safe unittest {
-  import common.parsemode;
+unittest {
+  import parsemode;
 
   assert(parse_mode(["0644"], 0) == 420);
   assert(parse_mode(["0644", "000"]) == 0);
