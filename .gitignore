@@ -5,3 +5,5 @@ dub.selections.json
 *~
 \#*
 *.a
+*-test-library
+*-test-library.exe
