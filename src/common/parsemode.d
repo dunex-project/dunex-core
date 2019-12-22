@@ -27,7 +27,7 @@ class PermParseException : Exception {
 }
 
 /***********************************
- * parse a mode string into a mode_t value.
+ * parse a list of mode strings into a mode_t value.
  *
  * Params:
  *        string[] mode_spec = A list of mode specifiers, either as an octal number (three or four digits) or as a
@@ -37,7 +37,7 @@ class PermParseException : Exception {
  *
  *        mode_t base_mode = the starting mode to apply mode changes to as parsed. Default: 0644
  */
-mode_t parse_mode(const string[] mode_spec, mode_t base_mode = 420) {
+mode_t parseMode(const string[] mode_spec, mode_t base_mode = 420) {
   mode_t mode = base_mode;
 
   foreach (token; mode_spec) {
@@ -123,14 +123,27 @@ mode_t parse_mode(const string[] mode_spec, mode_t base_mode = 420) {
   return mode;
 }
 
+/***********************************
+ * parse a mode string into a mode_t value. This is a proxy to parseMode(string[]).
+ *
+ * Params:
+ *        string mode_spec
+ *        mode_t base_mode
+ */
+mode_t parseMode(const string mode_spec, mode_t base_mode = 420) {
+  return parseMode([mode_spec], base_mode);
+}
+
 unittest {
   import parsemode;
 
-  assert(parse_mode(["0644"], 0) == 420); // if base is 0, 0644 should be 420 dec.
-  assert(parse_mode(["0644", "000"]) == 0); // it should apply the perms in order
-  assert(parse_mode(["0000"]) == 0);
-  assert(parse_mode(["a+x"], 420) == 493); // add +x to all three perm groups
-  assert(parse_mode(["o=rx", "u+rw"], 0) == 389);
-  assert(parse_mode(["o=rx", "u+rw"]) == 389); // = operator should overwrite bits on base mode
-  assert(parse_mode(["+x"]) == parse_mode(["a+x"]));
+  assert(parseMode(["0644"], 0) == 420); // if base is 0, 0644 should be 420 dec.
+  assert(parseMode(["0644", "000"]) == 0); // it should apply the perms in order
+  assert(parseMode(["0000"]) == 0);
+  assert(parseMode(["a+x"], 420) == 493); // add +x to all three perm groups
+  assert(parseMode(["o=rx", "u+rw"], 0) == 389);
+  assert(parseMode(["o=rx", "u+rw"]) == 389); // = operator should overwrite bits on base mode
+  assert(parseMode(["+x"]) == parseMode(["a+x"]));
+
+  assert(parseMode(["+x"]) == parseMode("+x"));
 }

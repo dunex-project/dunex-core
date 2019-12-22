@@ -251,3 +251,13 @@ subPackage {
      dependency "dunex-core:common" version="*"
      stringImportPaths "."
 }
+
+subPackage {
+     name "mkfifo"
+     targetName "mkfifo"
+     targetPath "out/"
+     targetType "executable"
+     sourcePaths "src/mkfifo"
+     dependency "dunex-core:common" version="*"
+     stringImportPaths "."
+}

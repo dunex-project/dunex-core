@@ -15,6 +15,16 @@
 module ordinal;
 import std.format;
 
+/***********************************
+ * convert number into an English ordinal string
+ *
+ * Params:
+ *        long n = Input number
+ *
+ * Returns:
+ *        string = newly allocated string with the number an an ordinal suffix.
+ *
+ */
 @safe toOrdinal(long n) {
   static const string[] suffixes = ["th", "st", "nd", "rd"];
   auto ord = n % 100;
@@ -29,5 +39,9 @@ import std.format;
 }
 
 unittest {
-  assert(true);
+  import ordinal;
+
+  assert(toOrdinal(5) == "5th");
+  assert(toOrdinal(1) == "1st");
+  assert(toOrdinal(3) == "3rd");
 }

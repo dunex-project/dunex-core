@@ -19,8 +19,23 @@ import std.algorithm;
 import std.array;
 import std.string;
 
-@safe pure string decode_escapes(string inp) {
+/***********************************
+ * decode escaped character in the input string
+ *
+ * Supported escapes:
+ * \t \0 \a \b \f \n \r \b \\
+ * All other characters lead with a backslash are returned literally.
+ *
+ * Params:
+ *        string inp = A string to decode the escapes from
+ *
+ * Returns:
+ *        string = newly allocated string which is a copy of input string with escapes decoded.
+ *
+ */
+@safe pure string decodeEscapes(const string input) {
 	string ret;
+	string inp = input;
 	char ch;
 	while (inp.length) {
 		ch = inp[0];
@@ -64,5 +79,7 @@ import std.string;
 }
 
 unittest {
-  assert(decode_escapes("\\n") == "\n");
+  import escapes;
+
+  assert(decodeEscapes(cast(string)r"\n\\\t\0\a\b\f\n\r\v\%") == "\n\\\t\0\a\b\f\n\r\v%");
 }
