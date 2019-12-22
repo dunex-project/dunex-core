@@ -34,6 +34,7 @@ class PermParseException : Exception {
  *                           series of symbolic strings in the form of [aguo][+=-][rwxst]. Symbolic modes
  *                           are applied to the base_mode parameter, while numeric modes nominally replace
  *                           base_mode. Mode manipulations are applied in order supplied.
+ *
  *        mode_t base_mode = the starting mode to apply mode changes to as parsed. Default: 0644
  */
 mode_t parse_mode(const string[] mode_spec, mode_t base_mode = 420) {
@@ -124,7 +125,6 @@ mode_t parse_mode(const string[] mode_spec, mode_t base_mode = 420) {
 
 unittest {
   import parsemode;
-  import std.stdio;
 
   assert(parse_mode(["0644"], 0) == 420); // if base is 0, 0644 should be 420 dec.
   assert(parse_mode(["0644", "000"]) == 0); // it should apply the perms in order

@@ -13,3 +13,6 @@ find -name '*~' |xargs rm -f
 # clean up generated doc files
 rm -fr doc/man/man
 rm -fr doc/man/html
+
+# clean up test artifacts
+rm -f *test-library
