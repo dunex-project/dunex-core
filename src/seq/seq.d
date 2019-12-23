@@ -72,11 +72,11 @@ int main(string[] args) {
 		}
 	}
 
-	separator = decode_escapes(separator);
+	separator = decodeEscapes(separator);
 	if (terminal.length == 0)
 		terminal = separator;
 	else
-		terminal = decode_escapes(terminal);
+		terminal = decodeEscapes(terminal);
 
 	real seq;
 	for (seq = first; (incr < 0) ? (seq + incr >= last) : (seq + incr <= last); seq += incr) {

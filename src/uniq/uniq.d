@@ -23,6 +23,7 @@ enum APP_AUTHORS = ["chaomodus"];
 enum APP_LICENSE = import("COPYING");
 enum APP_CAP = ["uniq"];
 
+
 int main(string[] args) {
   try {
     return runApplication(args, (Program app) {

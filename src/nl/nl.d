@@ -114,7 +114,7 @@ int main(string[] args) {
 	process_mode_arg(&bodyMode, &bodyRegex, args.option("body"));
 	process_mode_arg(&footerMode, &footerRegex, args.option("footer"));
 	process_mode_arg(&headerMode, &headerRegex, args.option("header"));
-	string separator = decode_escapes(args.option("separator"));
+	string separator = decodeEscapes(args.option("separator"));
 	bool norestart = args.flag("nopagerestart");
 	if (args.flag("leftalign"))
 	  left_align = true;
