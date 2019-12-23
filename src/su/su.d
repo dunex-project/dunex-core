@@ -59,8 +59,7 @@ enum APP_NAME = "su";
 	Help header format string
 */
 enum APP_DESC = "Super User
-Allows you to run an application as a different user (by default %s)
-".format(DEFAULT_USER);
+Allows you to run an application as a different user (by default %s)".format(DEFAULT_USER);
 
 /**
 	App version
