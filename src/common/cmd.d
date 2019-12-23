@@ -4,6 +4,7 @@ import std.format;
 import std.array : join;
 import std.stdio : writeln;
 import std.file : write;
+import std.stdio : stderr;
 
 public import commandr;
 
@@ -52,7 +53,16 @@ int runApplication(string mod = __MODULE__)(string[] args, void delegate(Program
     appInstance.add(new Flag(null, "license", "Shows license text"));
     argc(appInstance);
 
-    ProgramArgs argInstance = appInstance.parseArgs(args);
+    ProgramArgs argInstance;
+
+    // Pretty print argument errors
+    try {
+        argInstance = appInstance.parseArgs(args);
+    } catch (Exception ex) {
+        stderr.writeln(ex.msg);
+        return -1;
+    }
+    
     if (argInstance.hasFlag("version")) {
         string name = appInstance.name;
         string version_ = appInstance.version_;
