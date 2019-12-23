@@ -30,9 +30,11 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 * wc
 * cat
 * nl (missing a weird little feature but should be easy to implement)
+* mkfifo
 
 ## WIP ##
 
+* uniq
 * mkdir
 * cksum (doesn't work - algorithm isn't standard and implementation isn't correct).
 * su (Clipsey is doing that)
