@@ -261,3 +261,13 @@ subPackage {
      dependency "dunex-core:common" version="*"
      stringImportPaths "."
 }
+
+subPackage {
+     name "paste"
+     targetName "paste"
+     targetPath "out/"
+     targetType "executable"
+     sourcePaths "src/paste"
+     dependency "dunex-core:common" version="*"
+     stringImportPaths "."
+}

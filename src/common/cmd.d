@@ -32,7 +32,7 @@ public import commandr;
         }
     ```
 */
-int runApplication(string mod = __MODULE__)(string[] args, void delegate(Program) argc, int delegate(ProgramArgs) exec) {
+int runApplication(string mod = __MODULE__)(string[] args, void delegate(Program) argc, int delegate(ProgramArgs, string[]) exec) {
     pragma(msg, "Building command structure for %s...".format(mod));
     mixin(q{import %s;}.format(mod));
 
@@ -62,7 +62,7 @@ int runApplication(string mod = __MODULE__)(string[] args, void delegate(Program
         stderr.writeln(ex.msg);
         return -1;
     }
-    
+
     if (argInstance.hasFlag("version")) {
         string name = appInstance.name;
         string version_ = appInstance.version_;
@@ -84,7 +84,12 @@ int runApplication(string mod = __MODULE__)(string[] args, void delegate(Program
         return 0;
     }
 
-    return exec(argInstance);
+    return exec(argInstance, args);
+}
+
+int runApplication(string mod = __MODULE__)(string[] args, void delegate(Program) argc, int delegate(ProgramArgs) exec) {
+
+  return runApplication!mod(args, argc, (ProgramArgs a, string[] extra) { return exec(a); });
 }
 
 unittest {
