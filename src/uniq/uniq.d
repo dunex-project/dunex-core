@@ -41,7 +41,7 @@ int main(string[] args) {
 	string line;
 	uint lastline_count = 1;
 	while (!stdin.eof) {
-	  line = stdin.readln();
+	  line = stdin.readln().strip(['\n']);
 
 	  if (args.flag("insensitive"))
 	    line = line.toLower();
@@ -56,7 +56,7 @@ int main(string[] args) {
 	  if (line) {
 	    if (args.flag("count"))
 	      {
-		writeln(lastline_count, " ", line[0..$-1]);
+		writeln(lastline_count, " ", line);
 	      }
 	    else {
 	      writeln(line);

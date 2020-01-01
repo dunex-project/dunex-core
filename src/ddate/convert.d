@@ -15,6 +15,8 @@
 
 */
 
+module convert;
+
 import common.ordinal;
 
 import std.conv;
@@ -95,7 +97,7 @@ public:
       doy -= 1;
     }
 
-    this.season = cast(DSeason)((doy / 73) + 1);
+    this.season = cast(DSeason)(doy / 73);
     this.day = cast(ubyte)(doy - ((this.season - 1) * 73));
     this.dayOfWeek = cast(DDayOfWeek)((doy - 1 ) % 5);
   }
@@ -111,7 +113,7 @@ public:
     if (this.isStTibbs) {
       return format("%s, YOLD %d", defaultStTibbsDay, this.year);
     }
-    return format("%s the %s of %s, YOLD %d", defaultDayNames[cast(int)this.dayOfWeek], toOrdinal(this.day), defaultSeasonNames[cast(int)this.season-1], this.year);
+    return format("%s the %s of %s, YOLD %d", defaultDayNames[cast(int)this.dayOfWeek-1], toOrdinal(this.day), defaultSeasonNames[cast(int)this.season-1], this.year);
   }
 
 }
