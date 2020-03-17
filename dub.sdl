@@ -2,7 +2,7 @@ name "dunex-core"
 authors "Cas Rusnov" "Clipsey" "DUNEX Contributors"
 description "Reimplemention of coreutils in D"
 license "BSL-1.0"
-copyright "Copyright © 2019, DUNEX Contributors"
+copyright "Copyright © 2019, 2020, DUNEX Contributors"
 targetType "none"
 targetPath "out/"
 
@@ -46,6 +46,7 @@ subPackage {
     targetType "executable"
     sourcePaths "src/ddate"
     dependency "dunex-core:common" version="~master"
+    stringImportPaths "."
 }
 
 subPackage {
