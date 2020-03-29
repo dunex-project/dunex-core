@@ -1,5 +1,5 @@
 /*
-	Copyright (c) 2019, DUNEX Contributors
+	Copyright (c) 2019, 2020, DUNEX Contributors
 	Use, modification and distribution are subject to the
 	Boost Software License, Version 1.0.  (See accompanying file
 	COPYING or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -10,7 +10,9 @@
 
 */
 
+import std.conv;
 import std.format;
+import std.algorithm.searching;
 import std.stdio;
 import std.string;
 
@@ -23,6 +25,11 @@ enum APP_AUTHORS = ["chaomodus"];
 enum APP_LICENSE = import("COPYING");
 enum APP_CAP = ["uniq"];
 
+enum mode {
+	   UNIQ,
+	   REPEATS,
+	   NONREPEATS
+}
 
 int main(string[] args) {
   try {
@@ -38,30 +45,66 @@ int main(string[] args) {
       },
       (ProgramArgs args) {
 	string lastline;
+	string lastcompline;
 	string line;
+	string compline;
 	uint lastline_count = 1;
+	uint fieldskip = to!uint(args.option("fieldskip"));
+	uint charskip = to!uint(args.option("charskip"));
+	bool start = true;
+	mode progmode = mode.UNIQ;
+
+	if (args.flag("onlyrepeats")) {
+	  progmode = mode.REPEATS;
+	} else if (args.flag("norepeats")) {
+	  progmode = mode.NONREPEATS;
+	}
+	
 	while (!stdin.eof) {
 	  line = stdin.readln().strip(['\n']);
+	  compline = line;
 
 	  if (args.flag("insensitive"))
-	    line = line.toLower();
+	    compline = compline.toLower();
 
-	  if (lastline == line)
+	  if (fieldskip > 0) {
+	    for (uint i = 0; i < fieldskip;  i++) {
+	      auto res = findAmong(cast(char[])compline, [' ', '\t']);
+		if (res) {
+		  compline = to!string(res);
+		} else {
+		  break;
+		}
+	      }
+	  }
+	  
+	  if (charskip > 0) {
+	    if (charskip > compline.length) {
+	      compline = "";
+	    } else {
+	      compline = compline[charskip-1..$];
+	    }
+	  }
+
+	  if (lastcompline == compline) {
+	    // repeat line
 	    lastline_count += 1;
-	  else {
+	  } else {
+	    // new unique line
+	    if (((progmode == mode.NONREPEATS) && lastline_count == 1) ||
+		((progmode == mode.REPEATS) && lastline_count > 1) ||
+		(progmode == mode.UNIQ)) {
+	      if (!start) {
+		writeln(lastline);
+	      } else {
+		start = false;
+	      }
+	    }
+	    //reset
 	    lastline_count = 1;
 	  }
 	  lastline = line;
-
-	  if (line) {
-	    if (args.flag("count"))
-	      {
-		writeln(lastline_count, " ", line);
-	      }
-	    else {
-	      writeln(line);
-	    }
-	  }
+	  lastcompline = compline;
 	}
 	return 0;
       });
