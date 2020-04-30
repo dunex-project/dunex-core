@@ -11,8 +11,8 @@
 
 module app;
 
-import std.stdio;
-import std.array;
+import std.stdio : write, stderr;
+import std.array : join;
 
 import common.cmd;
 
@@ -25,26 +25,20 @@ enum APP_CAP = ["yes"];
 
 int main(string[] args) {
     return runApplication(args, (Program app) {
-            app.add(new Argument("string", "the string to print repeatedly").optional);
+            app.add(new Argument("string", "the string to print repeatedly").optional.repeating);
             app.add(new Flag("n", "no-newline", "omit newline character when printing").name("noNewline"));
         },
         (ProgramArgs args) {
             try {
-                if (args.flag("noNewline")) {
-                    if (args.arg("string").length == 0) {
-                        while (true)
-                            write("y");
-                    } else {
-                        while (true)
-                            write(args.arg("string"));
-                    }
+                string nl = args.flag("noNewline") ? "" : "\n";
+
+                if (args.arg("string").length == 0) {
+                    while (true)
+                        write("y", nl);
                 } else {
-                    if (args.arg("string").length == 0) {
-                        while (true)
-                            writeln("y");
-                    } else {
-                        while (true)
-                            writeln(args.arg("string"));
+                    string joined_args = args.args("string").join(" ");
+                    while (true) {
+                        write(joined_args, nl);
                     }
                 }
             } catch(Exception ex) {
