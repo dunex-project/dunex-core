@@ -8,12 +8,19 @@ NAME
 SYNOPSIS
 ========
 
-| **yes** [_STRING_]...
+| **yes** \[**-n**|**\-\-no-newline**] [_STRING_]...
 
 DESCRIPTION
 ===========
 
 Repeatedly prints the string specified on the command line. If no string is provided, prints 'y' instead.
+
+FLAGS
+=====
+
+-n, \-\-no-newline
+
+: Do not add a newline after the printed string.
 
 AUTHORS
 =======
@@ -30,5 +37,3 @@ dunex-core Version 1.0
 
 SEE ALSO
 ========
-
-// TODO

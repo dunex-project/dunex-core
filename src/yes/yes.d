@@ -26,15 +26,26 @@ enum APP_CAP = ["yes"];
 int main(string[] args) {
     return runApplication(args, (Program app) {
             app.add(new Argument("string", "the string to print repeatedly").optional);
+            app.add(new Flag("n", "no-newline", "omit newline character when printing").name("noNewline"));
         },
         (ProgramArgs args) {
             try {
-                if (args.arg("string").length == 0) {
-                    while (true)
-                        writeln("y");
+                if (args.flag("noNewline")) {
+                    if (args.arg("string").length == 0) {
+                        while (true)
+                            write("y");
+                    } else {
+                        while (true)
+                            write(args.arg("string"));
+                    }
                 } else {
-                    while (true)
-                        writeln(args.arg("string"));
+                    if (args.arg("string").length == 0) {
+                        while (true)
+                            writeln("y");
+                    } else {
+                        while (true)
+                            writeln(args.arg("string"));
+                    }
                 }
             } catch(Exception ex) {
                 stderr.writeln(APP_NAME, ": ", ex.msg);
