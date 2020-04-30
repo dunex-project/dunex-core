@@ -30,22 +30,13 @@ int main(string[] args) {
         },
         (ProgramArgs args) {
             try {
-                if (args.flag("noNewline")) {
-                    if (args.arg("string").length == 0) {
-                        while (true)
-                            write("y");
-                    } else {
-                        while (true)
-                            write(args.arg("string"));
-                    }
+                string nl = args.flag("noNewline") ? "" : "\n";
+                if (args.arg("string").length == 0) {
+                    while (true)
+                        write("y", nl);
                 } else {
-                    if (args.arg("string").length == 0) {
-                        while (true)
-                            writeln("y");
-                    } else {
-                        while (true)
-                            writeln(args.arg("string"));
-                    }
+                    while (true)
+                        write(args.arg("string"), nl);
                 }
             } catch(Exception ex) {
                 stderr.writeln(APP_NAME, ": ", ex.msg);
