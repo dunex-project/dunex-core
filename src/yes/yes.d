@@ -15,6 +15,7 @@ import std.stdio : write, stderr;
 import std.array : join;
 
 import common.cmd;
+import common.escapes;
 
 enum APP_NAME = "yes";
 enum APP_DESC = "Repeatedly print the specified string or 'y'.";
@@ -31,16 +32,11 @@ int main(string[] args) {
         (ProgramArgs args) {
             try {
                 string nl = args.flag("noNewline") ? "" : "\n";
+                string argsToPrint = args.arg("string").length == 0 ? "y" : decodeEscapes(args.args("string").join(" "));
 
-                if (args.arg("string").length == 0) {
-                    while (true)
-                        write("y", nl);
-                } else {
-                    string joined_args = args.args("string").join(" ");
-                    while (true) {
-                        write(joined_args, nl);
-                    }
-                }
+                while (true)
+                    write(argsToPrint, nl);
+
             } catch(Exception ex) {
                 stderr.writeln(APP_NAME, ": ", ex.msg);
                 return 1;

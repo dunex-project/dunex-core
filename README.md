@@ -9,6 +9,7 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 ## Done and Documented with a manpage but needs i18n ##
 
 * dirname (1dunex)
+* yes
 
 ## (Mostly) Done but needs documentation ##
 
@@ -16,8 +17,7 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 * mkfifo
 * ddate
 
-## Done but needs porting to command framework ## 
-* yes
+## Done but needs porting to command framework ##
 * tee
 * tty
 * echo
