@@ -14,6 +14,7 @@ DESCRIPTION
 ===========
 
 Repeatedly prints the string specified on the command line. If no string is provided, prints 'y' instead.
+Can be used to print arbitrary UTF-8 characters with the format '\\uNNNN'.
 
 FLAGS
 =====
@@ -37,3 +38,5 @@ dunex-core Version 1.0
 
 SEE ALSO
 ========
+
+**dunex-core(7dunex)** **dunex(7dunex)**
