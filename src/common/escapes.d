@@ -4,8 +4,8 @@
 	Boost Software License, Version 1.0.  (See accompanying file
 	COPYING or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-	Author(s): chaomodus
-	2019-11-29T17:43:11
+	Author(s): chaomodus, Marie-Joseph
+	2020-05-01T01:33
 
 	This implements decoding common character escapes.
 
@@ -17,7 +17,10 @@ module escapes;
 
 import std.algorithm;
 import std.array;
+import std.conv : to;
+import std.range : take, popFrontN;
 import std.string;
+import std.utf : toUTF8;
 
 /***********************************
  * decode escaped character in the input string
@@ -65,6 +68,15 @@ import std.string;
 			case 'r':
 				ret ~= "\r";
 				break;
+			case 'u':
+				if (inp.length >= 4) {
+					try {
+						ret ~= inp.take(4).to!int(16).to!wchar.to!string.toUTF8();
+						inp.popFrontN(4);
+						break;
+					} catch (Exception ex) {}
+				}
+				goto default;
 			case 'v':
 				ret ~= "\v";
 				break;
