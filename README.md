@@ -6,18 +6,18 @@ At current time the implementations are more like the FreeBSD core utilities.
 
 Either `dub build` to use dub or `./build.sh` to use meson.
 
-## Done and Documented with a manpage but needs i18n ##
+## Done and documented with a manpage but needs i18n ##
 
+* ddate (1dunex)
 * dirname (1dunex)
+* mkfifo (1dunex)
+* yes (1dunex)
 
 ## (Mostly) Done but needs documentation ##
 
 * nl (missing a weird little feature but should be easy to implement)
-* mkfifo
-* ddate
 
-## Done but needs porting to command framework ## 
-* yes
+## Done but needs porting to command framework ##
 * tee
 * tty
 * echo

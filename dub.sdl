@@ -79,10 +79,12 @@ subPackage {
 }
 subPackage {
 	name "yes"
+	dependency "dunex-core:common" version=">=0.0.0"
 	targetType "executable"
 	targetPath "out/"
 	targetName "yes"
 	sourcePaths "src/yes"
+	stringImportPaths "."
 }
 subPackage {
 	name "tee"
