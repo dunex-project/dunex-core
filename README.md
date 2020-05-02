@@ -11,6 +11,7 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 * ddate (1dunex)
 * dirname (1dunex)
 * mkfifo (1dunex)
+* pwd (1dunex)
 * yes (1dunex)
 
 ## (Mostly) Done but needs documentation ##
@@ -44,7 +45,6 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 * su (Clipsey is doing that)
 * factor (works for up to ulong length things but is a naive implementation that is slower than good implementations)
 * hostname
-* pwd (needs flags)
 
 
 ## Todo ##
