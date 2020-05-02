@@ -14,7 +14,10 @@ DESCRIPTION
 ===========
 
 Repeatedly prints the string specified on the command line. If no string is provided, prints 'y' instead.
-Can be used to print arbitrary UTF-8 characters with the format '\\uNNNN'.
+
+This implementation passes through properly escaped command characters; e.g.
+'\\t' will be a tab or '\\uHHHH' will be the UTF-8 character represented by that
+hexadecimal code.
 
 FLAGS
 =====
