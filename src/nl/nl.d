@@ -96,7 +96,7 @@ int main(string[] args) {
 	app.add(new Option("n", "format", "POSIX-style format specifier (ln for left justified, rn for right justfied, rz for right just 0 padded). Default: rn").acceptsValues(["ln", "rn", "rz"]).defaultValue("rn"));
 	app.add(new Option("w", "width", "Specify the width of the number column.").defaultValue("6"));
 	app.add(new Option("v", "startnum", "Specify the number to start with when numbering lines in a page.").defaultValue("1"));
-	// app.add(new Option("l", "blanklines", "Specify the number of blank lines to count as one blank line in 'n' mode.").defaultValue("1"));
+	app.add(new Option("l", "blanklines", "Specify the number of blank lines to count as one blank line in 'n' mode.").defaultValue("1"));
 	app.add(new Option(null, "countformat", "Specify the C-style format to use to print the line numbers."));
 	app.add(new Option("d", "delim", "Specify the section delimiter. Default: ::").defaultValue("::"));
 	app.add(new Flag("p", "nopagerestart", "Don't restart numbering on a logical page change."));
