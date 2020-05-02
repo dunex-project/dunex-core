@@ -18,6 +18,7 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 * nl (missing a weird little feature but should be easy to implement)
 
 ## Done but needs porting to command framework ##
+
 * tee
 * tty
 * echo
@@ -33,16 +34,17 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 * sleep
 * su
 * wc
-* cat
 
 ## WIP ##
 
+* cat (needs flags)
 * uniq
 * mkdir
 * cksum (doesn't work - algorithm isn't standard and implementation isn't correct).
 * su (Clipsey is doing that)
 * factor (works for up to ulong length things but is a naive implementation that is slower than good implementations)
 * hostname
+* pwd (needs flags)
 
 
 ## Todo ##
