@@ -21,7 +21,7 @@ import std.file : getcwd;
 import std.stdio : stderr, writeln;
 
 enum APP_NAME = "pwd";
-enum APP_DESC = "Prints the present working directory";
+enum APP_DESC = "Print the present working directory.";
 enum APP_VERSION = "1.0 (dunex-core)";
 enum APP_AUTHORS = ["Marie-Joseph"];
 enum APP_LICENSE = import("COPYING");
