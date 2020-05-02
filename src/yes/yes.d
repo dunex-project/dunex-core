@@ -11,11 +11,11 @@
 
 module app;
 
-import std.stdio : write, stderr;
-import std.array : join;
-
 import common.cmd;
 import common.escapes;
+
+import std.stdio : write, stderr;
+import std.array : join;
 
 enum APP_NAME = "yes";
 enum APP_DESC = "Repeatedly print the specified string or 'y'.";

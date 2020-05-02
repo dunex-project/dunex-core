@@ -17,10 +17,9 @@ module escapes;
 
 import std.algorithm;
 import std.array;
-import std.string;
-
-import std.range : take, popFrontN;
 import std.conv : to;
+import std.range : take, popFrontN;
+import std.string;
 import std.utf : toUTF8;
 
 /***********************************
@@ -71,12 +70,13 @@ import std.utf : toUTF8;
 				break;
 			case 'u':
 				if (inp.length >= 4) {
-					ret ~= inp.take(4).to!int(16).to!wchar.to!string.toUTF8();
-					inp.popFrontN(4);
-				} else {
-					ret ~= "u";
+					try {
+						ret ~= inp.take(4).to!int(16).to!wchar.to!string.toUTF8();
+						inp.popFrontN(4);
+						break;
+					} catch (Exception ex) {}
 				}
-				break;
+				goto default;
 			case 'v':
 				ret ~= "\v";
 				break;
