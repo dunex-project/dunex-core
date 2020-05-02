@@ -6,6 +6,7 @@ rm -fr build
 rm -fr .dub
 rm -f *.a
 rm -f dub.selections.json
+rm -rf out
 
 # clean up temp, backup files
 find -name '*~' |xargs rm -f
