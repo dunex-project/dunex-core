@@ -22,7 +22,7 @@ enum APP_DESC = "Repeatedly print the specified string or 'y'.";
 enum APP_VERSION = "1.0 (dunex-core)";
 enum APP_AUTHORS = ["chaomodus", "Marie-Joseph"];
 enum APP_LICENSE = import("COPYING");
-enum APP_CAP = ["yes"];
+enum APP_CAP = [APP_NAME];
 
 int main(string[] args) {
     return runApplication(args, (Program app) {
