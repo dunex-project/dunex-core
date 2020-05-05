@@ -15,9 +15,10 @@ module app;
 import common.cmd;
 
 import core.sys.posix.signal;
+import std.algorithm : each;
+import std.array : insertInPlace;
 import std.exception;
 import std.stdio;
-import std.getopt;
 import std.file;
 import std.process;
 
@@ -42,10 +43,9 @@ int main(string[] args) {
 			char[1] outbuff;
 			char[] inp;
 			File[] outf = [stdout];
-			writeln(args.args("files"));
-			if (args.arg("files").length > 1) {
+			if (args.args("files").length > 0) {
 				foreach (fname; args.args("files")) {
-					outf ~= [File(fname, args.flag("append") ? "a" : "w")];
+					outf ~= [File(fname, args.flag("append") ? "ab" : "wb")];
 				}
 			}
 			while (true) {
@@ -53,6 +53,7 @@ int main(string[] args) {
 					inp = stdin.rawRead(outbuff);
 				} catch (ErrnoException e) {
 					writeln(APP_NAME, ": error occured during reading: ", e.msg);
+					return 1;
 				}
 				if (inp.length > 0) {
 					foreach (f; outf) {
