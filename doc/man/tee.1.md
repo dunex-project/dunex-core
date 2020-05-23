@@ -18,15 +18,15 @@ Copies stdin to stdout, and optionally other files, according to the set flags.
 FLAGS
 ======
 
- **-a**, **\--append** - Append to rather than overwriting the specified file(s).
+ **-a**, **\--append**  Append to rather than overwriting the specified file(s).
 
- **-b**, **\--full-buffer** - Fully buffer the input stream. The program must exit by encountering `EOF` to write to any file(s) besides stdout.
+ **-b**, **\--full-buffer**  Fully buffer the input stream. The program must exit by encountering `EOF` to write to any file(s) besides stdout.
 
- **-i**, **\--ignore-interrupt** - Ignore the SIGINT interrupt signal.
+ **-i**, **\--ignore-interrupt**  Ignore the SIGINT interrupt signal.
 
- **-l**, **\--line-buffer** - Buffer the input stream until a newline is encountered.
+ **-l**, **\--line-buffer**  Buffer the input stream until a newline is encountered.
 
- **-n**, **\--no-buffer** - (default) Do not buffer the input stream.
+ **-n**, **\--no-buffer**  (default) Do not buffer the input stream.
 
 AUTHOR
 ======

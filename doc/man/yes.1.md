@@ -8,7 +8,7 @@ NAME
 SYNOPSIS
 ========
 
-| **yes** \[**-n**|**\-\-no-newline**] [_STRING_]...
+| **yes** \[**-n**|**\--no-newline**] [_STRING_]...
 
 DESCRIPTION
 ===========
@@ -22,7 +22,7 @@ hexadecimal code.
 FLAGS
 =====
 
-**-n**, **\-\-no-newline**  Do not add a newline after the printed string.
+**-n**, **\--no-newline**  Do not add a newline after the printed string.
 
 AUTHORS
 =======
