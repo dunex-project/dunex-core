@@ -6,9 +6,6 @@
 
 	tee: Copy stdin to stdout (unbuffered), and, optionally one or more output files.
 	Author(s): chaomodus
-
-	TODO:
-	* Does not properly write to files, let alone append to them, since port
 */
 module app;
 
@@ -32,7 +29,10 @@ enum APP_CAP = [APP_NAME];
 int main(string[] args) {
 	return runApplication(args, (Program app) {
 		app.add(new Flag("a", "append", "Append to rather than overwriting output file(s).").name("append").optional);
+		app.add(new Flag("b", "full-buffer", "Buffer the input stream until EOF.").name("fullBuf").optional);
 		app.add(new Flag("i", "ignore-interrupt", "Ignore the SIGINT signal.").name("ignoreInt").optional);
+		app.add(new Flag("l", "line-buffer", "Buffer the input stream until a newline.").name("lineBuf").optional);
+		app.add(new Flag("n", "no-buffer", "Do not buffer the input stream (default).").name("noBuf").optional);
 		app.add(new Argument("files", "File(s) where output is written.").name("files").optional.repeating);
 	},
 	(ProgramArgs args) {
@@ -46,6 +46,7 @@ int main(string[] args) {
 			if (args.args("files").length > 0) {
 				foreach (fname; args.args("files")) {
 					outf ~= [File(fname, args.flag("append") ? "ab" : "wb")];
+					outf[$ - 1].setvbuf(null, args.flag("fullBuf") ? _IOFBF : args.flag("lineBuf") ? _IOLBF : _IONBF);
 				}
 			}
 			while (true) {
