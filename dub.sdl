@@ -90,10 +90,12 @@ subPackage {
 }
 subPackage {
 	name "echo"
+	dependency "dunex-core:common" version=">=0.0.0"
 	targetType "executable"
 	targetPath "out/"
 	targetName "echo"
 	sourcePaths "src/echo"
+	stringImportPaths "."
 }
 subPackage {
 	name "factor"
