@@ -3,37 +3,72 @@ description "Reimplemention of coreutils in D"
 authors "Cas Rusnov" "Clipsey" "DUNEX Contributors"
 copyright "Copyright © 2019, 2020, DUNEX Contributors"
 license "BSL-1.0"
-dependency "dunex-core:dirname" version=">=0.0.0"
-dependency "dunex-core:cat" version=">=0.0.0"
-dependency "dunex-core:sync" version=">=0.0.0"
-dependency "dunex-core:yes" version=">=0.0.0"
-dependency "dunex-core:su" version=">=0.0.0"
-dependency "dunex-core:hostid" version=">=0.0.0"
-dependency "dunex-core:wc" version=">=0.0.0"
-dependency "dunex-core:basename" version=">=0.0.0"
-dependency "dunex-core:cksum" version=">=0.0.0"
-dependency "dunex-core:sleep" version=">=0.0.0"
-dependency "dunex-core:cut" version=">=0.0.0"
-dependency "dunex-core:factor" version=">=0.0.0"
-dependency "dunex-core:hostname" version=">=0.0.0"
-dependency "dunex-core:echo" version=">=0.0.0"
-dependency "dunex-core:return" version=">=0.0.0"
-dependency "dunex-core:unlink" version=">=0.0.0"
-dependency "dunex-core:tty" version=">=0.0.0"
-dependency "dunex-core:uname" version=">=0.0.0"
-dependency "dunex-core:nl" version=">=0.0.0"
 dependency "djtext" version="~>0.3.0"
+dependency "dunex-core:basename" version=">=0.0.0"
+dependency "dunex-core:cat" version=">=0.0.0"
+dependency "dunex-core:cksum" version=">=0.0.0"
+dependency "dunex-core:cut" version=">=0.0.0"
+dependency "dunex-core:ddate" version=">=0.0.0"
+dependency "dunex-core:dirname" version=">=0.0.0"
+dependency "dunex-core:echo" version=">=0.0.0"
+dependency "dunex-core:factor" version=">=0.0.0"
+dependency "dunex-core:hostid" version=">=0.0.0"
+dependency "dunex-core:hostname" version=">=0.0.0"
 dependency "dunex-core:mkdir" version=">=0.0.0"
+dependency "dunex-core:mkfifo" version=">=0.0.0"
+dependency "dunex-core:nl" version=">=0.0.0"
+dependency "dunex-core:paste" version=">=0.0.0"
+dependency "dunex-core:pwd" version=">=0.0.0"
+dependency "dunex-core:return" version=">=0.0.0"
+dependency "dunex-core:seq" version=">=0.0.0"
+dependency "dunex-core:sleep" version=">=0.0.0"
+dependency "dunex-core:su" version=">=0.0.0"
+dependency "dunex-core:sync" version=">=0.0.0"
 dependency "dunex-core:tee" version=">=0.0.0"
 dependency "dunex-core:tsort" version=">=0.0.0"
-dependency "dunex-core:seq" version=">=0.0.0"
+dependency "dunex-core:tty" version=">=0.0.0"
+dependency "dunex-core:uname" version=">=0.0.0"
+dependency "dunex-core:uniq" version=">=0.0.0"
+dependency "dunex-core:unlink" version=">=0.0.0"
+dependency "dunex-core:wc" version=">=0.0.0"
+dependency "dunex-core:yes" version=">=0.0.0"
 targetType "none"
 targetPath "out/"
+subPackage {
+	name "basename"
+	targetType "executable"
+	targetPath "out/"
+	targetName "basename"
+	sourcePaths "src/basename"
+}
+subPackage {
+	name "cat"
+	dependency "dunex-core:common" version=">=0.0.0"
+	targetType "executable"
+	targetPath "out/"
+	targetName "cat"
+	sourcePaths "src/cat"
+	stringImportPaths "."
+}
+subPackage {
+	name "cksum"
+	targetType "executable"
+	targetPath "out/"
+	targetName "cksum"
+	sourcePaths "src/cksum"
+}
 subPackage {
 	name "common"
 	dependency "commandr" version="~>0.1.0"
 	targetType "library"
 	sourcePaths "src/common"
+}
+subPackage {
+	name "cut"
+	targetType "executable"
+	targetPath "out/"
+	targetName "cut"
+	sourcePaths "src/cut"
 }
 subPackage {
 	name "ddate"
@@ -45,60 +80,13 @@ subPackage {
 	stringImportPaths "."
 }
 subPackage {
-	name "nl"
-	dependency "dunex-core:common" version="~master"
-	targetType "executable"
-	targetPath "out/"
-	targetName "nl"
-	sourcePaths "src/nl"
-	stringImportPaths "."
-}
-subPackage {
-	name "mkdir"
-	targetType "executable"
-	targetPath "out/"
-	targetName "mkdir"
-	sourcePaths "src/mkdir"
-}
-subPackage {
-	name "cksum"
-	targetType "executable"
-	targetPath "out/"
-	targetName "cksum"
-	sourcePaths "src/cksum"
-}
-subPackage {
-	name "su"
-	dependency "dunex-core:common" version=">=0.0.0"
-	dependency "dunex-auth" version="~master"
-	targetType "executable"
-	targetPath "out/"
-	targetName "su"
-	sourcePaths "src/su"
-	stringImportPaths "."
-}
-subPackage {
-	name "yes"
+	name "dirname"
 	dependency "dunex-core:common" version=">=0.0.0"
 	targetType "executable"
 	targetPath "out/"
-	targetName "yes"
-	sourcePaths "src/yes"
+	targetName "dirname"
+	sourcePaths "src/dirname"
 	stringImportPaths "."
-}
-subPackage {
-	name "tee"
-	targetType "executable"
-	targetPath "out/"
-	targetName "tee"
-	sourcePaths "src/tee"
-}
-subPackage {
-	name "tty"
-	targetType "executable"
-	targetPath "out/"
-	targetName "tty"
-	sourcePaths "src/tty"
 }
 subPackage {
 	name "echo"
@@ -108,18 +96,11 @@ subPackage {
 	sourcePaths "src/echo"
 }
 subPackage {
-	name "uname"
+	name "factor"
 	targetType "executable"
 	targetPath "out/"
-	targetName "uname"
-	sourcePaths "src/uname"
-}
-subPackage {
-	name "return"
-	targetType "executable"
-	targetPath "out/"
-	targetName "return"
-	sourcePaths "src/return"
+	targetName "factor"
+	sourcePaths "src/factor"
 }
 subPackage {
 	name "hostid"
@@ -138,48 +119,54 @@ subPackage {
 	stringImportPaths "."
 }
 subPackage {
-	name "unlink"
+	name "mkdir"
 	targetType "executable"
 	targetPath "out/"
-	targetName "unlink"
-	sourcePaths "src/unlink"
+	targetName "mkdir"
+	sourcePaths "src/mkdir"
 }
 subPackage {
-	name "sync"
-	targetType "executable"
-	targetPath "out/"
-	targetName "sync"
-	sourcePaths "src/sync"
-}
-subPackage {
-	name "basename"
-	targetType "executable"
-	targetPath "out/"
-	targetName "basename"
-	sourcePaths "src/basename"
-}
-subPackage {
-	name "dirname"
+	name "mkfifo"
 	dependency "dunex-core:common" version=">=0.0.0"
 	targetType "executable"
 	targetPath "out/"
-	targetName "dirname"
-	sourcePaths "src/dirname"
+	targetName "mkfifo"
+	sourcePaths "src/mkfifo"
 	stringImportPaths "."
 }
 subPackage {
-	name "tsort"
+	name "nl"
+	dependency "dunex-core:common" version="~master"
 	targetType "executable"
 	targetPath "out/"
-	targetName "tsort"
-	sourcePaths "src/tsort"
+	targetName "nl"
+	sourcePaths "src/nl"
+	stringImportPaths "."
 }
 subPackage {
-	name "cut"
+	name "paste"
+	dependency "dunex-core:common" version=">=0.0.0"
 	targetType "executable"
 	targetPath "out/"
-	targetName "cut"
-	sourcePaths "src/cut"
+	targetName "paste"
+	sourcePaths "src/paste"
+	stringImportPaths "."
+}
+subPackage {
+	name "pwd"
+	dependency "dunex-core:common" version=">=0.0.0"
+	targetType "executable"
+	targetPath "out/"
+	targetName "pwd"
+	sourcePaths "src/pwd"
+	stringImportPaths "."
+}
+subPackage {
+	name "return"
+	targetType "executable"
+	targetPath "out/"
+	targetName "return"
+	sourcePaths "src/return"
 }
 subPackage {
 	name "seq"
@@ -197,27 +184,49 @@ subPackage {
 	sourcePaths "src/sleep"
 }
 subPackage {
-	name "factor"
-	targetType "executable"
-	targetPath "out/"
-	targetName "factor"
-	sourcePaths "src/factor"
-}
-subPackage {
-	name "wc"
-	targetType "executable"
-	targetPath "out/"
-	targetName "wc"
-	sourcePaths "src/wc"
-}
-subPackage {
-	name "cat"
+	name "su"
 	dependency "dunex-core:common" version=">=0.0.0"
+	dependency "dunex-auth" version="~master"
 	targetType "executable"
 	targetPath "out/"
-	targetName "cat"
-	sourcePaths "src/cat"
+	targetName "su"
+	sourcePaths "src/su"
 	stringImportPaths "."
+}
+subPackage {
+	name "sync"
+	targetType "executable"
+	targetPath "out/"
+	targetName "sync"
+	sourcePaths "src/sync"
+}
+subPackage {
+	name "tee"
+	targetType "executable"
+	targetPath "out/"
+	targetName "tee"
+	sourcePaths "src/tee"
+}
+subPackage {
+	name "tsort"
+	targetType "executable"
+	targetPath "out/"
+	targetName "tsort"
+	sourcePaths "src/tsort"
+}
+subPackage {
+	name "tty"
+	targetType "executable"
+	targetPath "out/"
+	targetName "tty"
+	sourcePaths "src/tty"
+}
+subPackage {
+	name "uname"
+	targetType "executable"
+	targetPath "out/"
+	targetName "uname"
+	sourcePaths "src/uname"
 }
 subPackage {
 	name "uniq"
@@ -229,20 +238,25 @@ subPackage {
 	stringImportPaths "."
 }
 subPackage {
-	name "mkfifo"
-	dependency "dunex-core:common" version=">=0.0.0"
+	name "unlink"
 	targetType "executable"
 	targetPath "out/"
-	targetName "mkfifo"
-	sourcePaths "src/mkfifo"
-	stringImportPaths "."
+	targetName "unlink"
+	sourcePaths "src/unlink"
 }
 subPackage {
-	name "paste"
+	name "wc"
+	targetType "executable"
+	targetPath "out/"
+	targetName "wc"
+	sourcePaths "src/wc"
+}
+subPackage {
+	name "yes"
 	dependency "dunex-core:common" version=">=0.0.0"
 	targetType "executable"
 	targetPath "out/"
-	targetName "paste"
-	sourcePaths "src/paste"
+	targetName "yes"
+	sourcePaths "src/yes"
 	stringImportPaths "."
 }

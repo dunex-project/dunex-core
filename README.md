@@ -11,6 +11,7 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 * ddate (1dunex)
 * dirname (1dunex)
 * mkfifo (1dunex)
+* pwd (1dunex)
 * yes (1dunex)
 
 ## (Mostly) Done but needs documentation ##
@@ -18,6 +19,7 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 * nl (missing a weird little feature but should be easy to implement)
 
 ## Done but needs porting to command framework ##
+
 * tee
 * tty
 * echo
@@ -33,10 +35,10 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 * sleep
 * su
 * wc
-* cat
 
 ## WIP ##
 
+* cat (needs flags)
 * uniq
 * mkdir
 * cksum (doesn't work - algorithm isn't standard and implementation isn't correct).
