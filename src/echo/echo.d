@@ -7,27 +7,40 @@
 	echo: Print arguments to stdout.
 	Author(s): chaomodus
  */
+module app;
 
+import common.cmd;
 import std.stdio;
 
-bool noend = false;
+enum APP_NAME = "echo";
+enum APP_DESC = "Print arguments to stdout.";
+enum APP_VERSION = "1.0 (dunex-core)";
+enum APP_AUTHORS = ["chaomodus"];
+enum APP_LICENSE = import("COPYING");
+enum APP_CAP = [APP_NAME];
 
-int main(string[] arg) {
-	string[] words = arg[1 .. $];
-	if (words.length > 0) {
-		if (words[0] == "-n") {
-			noend = true;
-			words = words[1 .. $];
+int main(string[] args) {
+	return runApplication(args, (Program app) {
+		app.add(new Flag("n", null, "Omit newline at the end of input.").name("n").optional);
+		app.add(new Argument("words", "Content to print to stdout.").name("words").repeating);
+	},
+	(ProgramArgs args) {
+		try {
+			foreach (i, s; args.args("words")) {
+				stdout.write(s);
+				if (i + 1 != args.args("words").length) {
+					stdout.write(" ");
+				}
+			}
+			if (!args.flag("n")) {
+				stdout.write("\n");
+			}
+		} catch (Exception ex) {
+			stderr.writeln(APP_NAME, ": ", ex.msg);
+			return 1;
 		}
-	}
-	foreach (i, s; words) {
-		stdout.write(s);
-		if (i + 1 != words.length) {
-			stdout.write(" ");
-		}
-	}
-	if (!noend) {
-		stdout.write("\n");
-	}
-	return 0;
+		return 0;
+	});
 }
+
+
