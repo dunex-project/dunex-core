@@ -13,10 +13,11 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Returns the current date in the Discordian calendar, optionally in a specific format.
+Returns the current date in the Discordian calendar. Optionally, you may provide
+a format string for the returned date, according to the format modifiers below.
 
-FORMAT
-======
+FORMAT MODIFIERS
+================
 
  **%D** - ESO 1dd1293 standard format (default)
 

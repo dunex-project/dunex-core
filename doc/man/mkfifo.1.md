@@ -8,7 +8,7 @@ NAME
 SYNOPSIS
 ========
 
-| **mkfifo** \[**-m**|**\-\-mode** _mode_] _PATH_
+| **mkfifo** [**-m**|**\--mode** _mode_] _PATH_
 
 DESCRIPTION
 ===========
@@ -18,9 +18,7 @@ Creates a new named pipe (fifo).
 OPTIONS
 =======
 
--m, \-\-mode *mode*
-
-: Specify the mode of newly created pipe (default is 0666 & (~umask)).
+**-m**, **\--mode** *mode*  Specify the mode of newly created pipe (default is 0666 & (~umask)).
 
 AUTHOR
 ======

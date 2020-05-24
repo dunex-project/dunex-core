@@ -18,11 +18,9 @@ Prints the present working directory.
 FLAGS
 =====
 
--L
-: Print the logical present working directory (default).
+**-L**  Print the logical present working directory (default).
 
--P
-: Print the physical working directory, with symlinks resolved.
+**-P**  Print the physical working directory, with symlinks resolved.
 
 AUTHOR
 ======

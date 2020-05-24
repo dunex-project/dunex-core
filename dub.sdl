@@ -204,10 +204,12 @@ subPackage {
 }
 subPackage {
 	name "tee"
+	dependency "dunex-core:common" version=">=0.0.0"
 	targetType "executable"
 	targetPath "out/"
 	targetName "tee"
 	sourcePaths "src/tee"
+	stringImportPaths "."
 }
 subPackage {
 	name "tsort"
