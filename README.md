@@ -14,6 +14,7 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 * hostid
 * mkfifo (1dunex)
 * pwd (1dunex)
+* return - works as true or false (1dunex)
 * tee (1dunex)
 * tty (1dunex)
 * yes (1dunex)
