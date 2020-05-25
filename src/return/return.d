@@ -47,7 +47,7 @@ int main(string[] args) {
 
             return retval;
         } catch (Exception e) {
-            writeln(APP_NAME, ": ", e.msg);
+            stderr.writeln(APP_NAME, ": ", e.msg);
             return 1;
         }
     });
