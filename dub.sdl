@@ -222,10 +222,12 @@ subPackage {
 }
 subPackage {
 	name "tty"
+	dependency "dunex-core:common" version=">=0.0.0"
 	targetType "executable"
 	targetPath "out/"
 	targetName "tty"
 	sourcePaths "src/tty"
+	stringImportPaths "."
 }
 subPackage {
 	name "uname"
