@@ -9,31 +9,39 @@
 	Written by: chaomodus
 */
 
+module app;
+
+import common.cmd;
+
 import std.stdio;
 import std.string;
 import std.getopt;
 
-bool silent = false;
+enum APP_NAME = "tty";
+enum APP_DESC = "Print the name of the tty the program is running under.";
+enum APP_VERSION = "1.0 (dunex-core)";
+enum APP_AUTHORS = ["chaomodus"];
+enum APP_LICENSE = import("COPYING");
+enum APP_CAP = [APP_NAME];
 
 extern (C) char* ttyname(int fd);
 
 int main(string[] args) {
-	auto helpInformation = getopt(args, std.getopt.config.passThrough,
-		"s|silent", "Do not print any output.", &silent
-	);
+	return runApplication(args, (Program app) {
+		app.add(new Flag("s", "silent", "Do not print any output.").name("silent").optional);
+	},
+	(ProgramArgs args) {
+		try {
+			char* tty = ttyname(stdout.fileno);
 
-	if (helpInformation.helpWanted) {
-		defaultGetoptPrinter("Print the name of the current tty.", helpInformation.options);
-		return 1;
-	}
+			if (!args.flag("silent")) {
+				writeln(fromStringz(tty));
+			}
 
-	char* tty = ttyname(stdout.fileno);
-
-	if (!tty) {
-		return 2;
-	}
-	if (!silent) {
-		writeln(fromStringz(tty));
-	}
-	return 0;
+			return 0;
+		} catch (Exception e) {
+			stderr.writeln(APP_NAME, ": ", e.msg);
+			return 1;
+		}
+	});
 }

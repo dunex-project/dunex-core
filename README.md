@@ -14,6 +14,7 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 * mkfifo (1dunex)
 * pwd (1dunex)
 * tee (1dunex)
+* tty (1dunex)
 * yes (1dunex)
 
 ## (Mostly) Done but needs documentation ##
@@ -22,7 +23,6 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 
 ## Done but needs porting to command framework ##
 
-* tty
 * uname (this doesn't match Linux, but matches FreeBSD's implementation)
 * hostid
 * true / false (i called it "return" and it will work if you name it true, or false).
