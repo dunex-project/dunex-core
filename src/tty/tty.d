@@ -15,7 +15,6 @@ import common.cmd;
 
 import std.stdio;
 import std.string;
-import std.getopt;
 
 enum APP_NAME = "tty";
 enum APP_DESC = "Print the name of the tty the program is running under.";
