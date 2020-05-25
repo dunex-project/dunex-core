@@ -106,10 +106,12 @@ subPackage {
 }
 subPackage {
 	name "hostid"
+	dependency "dunex-core:common" version=">=0.0.0"
 	targetType "executable"
 	targetPath "out/"
 	targetName "hostid"
 	sourcePaths "src/hostid"
+	stringImportPaths "."
 }
 subPackage {
 	name "hostname"

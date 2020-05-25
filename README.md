@@ -11,6 +11,7 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 * ddate (1dunex)
 * dirname (1dunex)
 * echo (1dunex)
+* hostid
 * mkfifo (1dunex)
 * pwd (1dunex)
 * tee (1dunex)
@@ -24,7 +25,6 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 
 * tty
 * uname (this doesn't match Linux, but matches FreeBSD's implementation)
-* hostid
 * true / false (i called it "return" and it will work if you name it true, or false).
 * sync
 * basename
