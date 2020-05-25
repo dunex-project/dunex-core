@@ -13,6 +13,7 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 * echo (1dunex)
 * mkfifo (1dunex)
 * pwd (1dunex)
+* return - works as true or false (1dunex)
 * tee (1dunex)
 * yes (1dunex)
 
