@@ -9,27 +9,46 @@
 	Author(s): chaomodus
 */
 
+module app;
+
+import common.cmd;
+
 import std.algorithm;
 import std.conv;
 import std.stdio;
 
+enum APP_NAME = "return";
+enum APP_DESC = "Return true, false, or a specified numeric value.";
+enum APP_VERSION = "1.0 (dunex-core)";
+enum APP_AUTHORS = ["chaomodus"];
+enum APP_LICENSE = import("COPYING");
+enum APP_CAP = [APP_NAME];
+
 int main(string[] args) {
-  if (args[0].endsWith("false")) {
-    return 1;
-  } else if (args[0].endsWith("true")) {
-    return 0;
-  }
+    string givenName = args[0];
+    return runApplication(args, (Program app) {
+        app.add(new Argument("value", "A numeric value to be returned.").optional);
+    },
+    (ProgramArgs args) {
+        try {
+            if (givenName.endsWith("false")) {
+                return 1;
+            } else if (givenName.endsWith("true")) {
+                return 0;
+            }
 
-  int retval;
-  if (args.length == 2) {
-    // if return's argument is a non-integer, then it is ignored and 0 returned
-    try {
-      retval = parse!int(args[1]);
-    } catch (Throwable) {}
-  } else if (args.length > 2) {
-    writefln("%s: too many arguments", args[0]);
-    retval = 1;
-  }
+            int retval;
+            if (args.arg("value").length != 0) {
+            // if return's argument is a non-integer, then it is ignored and 0 returned
+                try {
+                    retval = to!int(args.arg("value"));
+                } catch (Throwable) {}
+            }
 
-  return retval;
+            return retval;
+        } catch (Exception e) {
+            writeln(APP_NAME, ": ", e.msg);
+            return 1;
+        }
+    });
 }

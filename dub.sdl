@@ -165,10 +165,12 @@ subPackage {
 }
 subPackage {
 	name "return"
+	dependency "dunex-core:common" version=">=0.0.0"
 	targetType "executable"
 	targetPath "out/"
 	targetName "return"
 	sourcePaths "src/return"
+	stringImportPaths "."
 }
 subPackage {
 	name "seq"
