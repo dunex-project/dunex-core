@@ -13,11 +13,12 @@ module app;
 
 import common.cmd;
 
+import core.stdc.errno;
 import std.stdio;
 import std.string;
 
 enum APP_NAME = "tty";
-enum APP_DESC = "Print the name of the tty the program is running under.";
+enum APP_DESC = "Print the name of the standard input tty.";
 enum APP_VERSION = "1.0 (dunex-core)";
 enum APP_AUTHORS = ["chaomodus"];
 enum APP_LICENSE = import("COPYING");
@@ -37,7 +38,13 @@ int main(string[] args) {
 				writeln(fromStringz(tty));
 			}
 
-			return 0;
+			if (errno == 0) {
+				return 0;
+			} else if (errno == ENOTTY) {
+				return 1;
+			}
+
+			return 2;
 		} catch (Exception e) {
 			stderr.writeln(APP_NAME, ": ", e.msg);
 			return 1;

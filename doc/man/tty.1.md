@@ -3,7 +3,7 @@
 NAME
 ====
 
-**tty** - print the name of the tty the program is running under
+**tty** - print the name of the standard input tty
 
 SYNOPSIS
 ========
@@ -13,7 +13,8 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Prints the name of the tty from which it is invoked.
+Prints the name of the standard input tty and returns 0. If stdin is not a tty,
+returns 1. If an error occurs, returns >1.
 
 AUTHOR
 ======
