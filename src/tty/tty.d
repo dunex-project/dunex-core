@@ -44,10 +44,10 @@ int main(string[] args) {
 				return 1;
 			}
 
-			return 2;
+			return 3;
 		} catch (Exception e) {
 			stderr.writeln(APP_NAME, ": ", e.msg);
-			return 1;
+			return 2;
 		}
 	});
 }
