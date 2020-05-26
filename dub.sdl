@@ -233,10 +233,12 @@ subPackage {
 }
 subPackage {
 	name "uname"
+	dependency "dunex-core:common" version=">=0.0.0"
 	targetType "executable"
 	targetPath "out/"
 	targetName "uname"
 	sourcePaths "src/uname"
+	stringImportPaths "."
 }
 subPackage {
 	name "uniq"
