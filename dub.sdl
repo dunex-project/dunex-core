@@ -19,6 +19,7 @@ dependency "dunex-core:mkfifo" version=">=0.0.0"
 dependency "dunex-core:nl" version=">=0.0.0"
 dependency "dunex-core:paste" version=">=0.0.0"
 dependency "dunex-core:pwd" version=">=0.0.0"
+dependency "dunex-core:replace" version=">=0.0.0"
 dependency "dunex-core:return" version=">=0.0.0"
 dependency "dunex-core:seq" version=">=0.0.0"
 dependency "dunex-core:sleep" version=">=0.0.0"
@@ -163,6 +164,15 @@ subPackage {
 	targetPath "out/"
 	targetName "pwd"
 	sourcePaths "src/pwd"
+	stringImportPaths "."
+}
+subPackage {
+	name "replace"
+	dependency "dunex-core:common" version=">=0.0.0"
+	targetType "executable"
+	targetPath "out/"
+	targetName "replace"
+	sourcePaths "src/replace"
 	stringImportPaths "."
 }
 subPackage {
