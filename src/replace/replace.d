@@ -4,7 +4,7 @@
 	Boost Software License, Version 1.0.  (See accompanying file
 	COPYING or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-    pwd: print the present working directory
+    replace: replace a string across a directory
 
 	Written by: Marie-Joseph
 
@@ -23,9 +23,9 @@ import std.stdio : stderr, writeln;
 
 enum APP_NAME = "replace";
 enum APP_DESC = "Replace all occurrences of a given string in all files in a directory with another string.";
-enum APP_VERSION = "1.0";
+enum APP_VERSION = "1.0 (dunex-core)";
 enum APP_AUTHORS = ["Marie-Joseph"];
-enum APP_LICENSE = "BSL-1.0";
+enum APP_LICENSE = import("COPYING");
 enum APP_CAP = [APP_NAME];
 
 int main(string[] args) {
