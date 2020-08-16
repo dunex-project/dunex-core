@@ -12,10 +12,9 @@ module app;
 
 import common.cmd;
 
-import std.getopt;
 import std.path : baseName;
-import std.stdio;
-import std.string;
+import std.stdio : stderr, writeln;
+import std.string : endsWith;
 
 enum APP_NAME = "basename";
 enum APP_DESC = "Print the filename portion of a path name.";
@@ -29,55 +28,22 @@ int main(string[] args) {
 		app.add(new Flag("a", "multiple", "Process each argument as a path name.").name("multiple").optional);
 		app.add(new Option("s", "suffix", "Specify a suffix to omit.").name("suffix").optional);
 		app.add(new Argument("path", "The path(s) to process.").required.repeating);
-		app.add(new Argument("suffix", "Optional suffix to omit.").optional)
 	},
 	(ProgramArgs args) {
 		try {
-			if (args.flag("multiple") || args.option("suffix").length > 0) {
-
-			} else {
-				foreach (path; args.args("path")) {
-					if (args.arg("suffix").length > 0 && path.endsWith(args.arg("suffix"))) {
-						writeln(baseName(path[0 .. $ - args.arg("suffix").length]));
-					} else {
-						writeln(baseName(path));
-					}
-				}
-
-			}
-
-
-			bool multiple = false;
 			string suffix;
 			string[] paths;
-			auto helpInformation = getopt(args, std.getopt.config.passThrough,
-				"a|multiple", "Process each argument as a path name.", &multiple,
-				"s|suffix", "Specify a suffix in -a mode.", &suffix
-			);
 
-			if (helpInformation.helpWanted) {
-				defaultGetoptPrinter("Print the basename portion of a path.", helpInformation.options);
-				return 1;
+			if (args.flag("multiple")) {
+				paths = args.args("path");
+			} else {
+				paths ~= [args.args("path")[0]];
 			}
 
-			if (multiple) {
-				if (!(args.length >= 2)) {
-					writeln(args[0], ": specify at least one path.");
-					return 1;
-				}
-				paths = args[1 .. $];
-			} else {
-				if (args.length < 2) {
-					writeln(args[0], ": specify a path name.");
-					return 1;
-				} else if (args.length > 3) {
-					writeln(args[0], ": too many arguments. Specify a path name and optional suffix.");
-					return 1;
-				}
-				paths ~= [args[1]];
-				if (args.length == 3) {
-					suffix = args[2];
-				}
+			if (args.option("suffix").length > 0) {
+				suffix = args.option("suffix");
+			} else if (!args.flag("multiple") && args.args("path").length == 2) {
+				suffix = args.args("path")[1];
 			}
 
 			foreach (path; paths) {

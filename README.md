@@ -8,6 +8,7 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 
 ## Done and documented with a manpage but needs i18n ##
 
+* basename (1dunex)
 * ddate (1dunex)
 * dirname (1dunex)
 * echo (1dunex)
@@ -28,7 +29,6 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 * uname (this doesn't match Linux, but matches FreeBSD's implementation)
 * true / false (i called it "return" and it will work if you name it true, or false).
 * sync
-* basename
 * tsort
 * cut (extends functionality in useful ways that are substantially better than gnu version).
 * unlink

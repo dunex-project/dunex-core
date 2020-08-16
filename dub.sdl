@@ -36,10 +36,12 @@ targetType "none"
 targetPath "out/"
 subPackage {
 	name "basename"
+	dependency "dunex-core:common" version=">=0.0.0"
 	targetType "executable"
 	targetPath "out/"
 	targetName "basename"
 	sourcePaths "src/basename"
+	stringImportPaths "."
 }
 subPackage {
 	name "cat"
