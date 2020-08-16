@@ -1,4 +1,4 @@
-% basename(1dunex) Version 1.0 | DUNEX Core
+% BASENAME(1dunex) Version 1.0 | DUNEX Core
 
 NAME
 ====
