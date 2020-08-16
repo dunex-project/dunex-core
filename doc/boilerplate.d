@@ -31,18 +31,16 @@ enum APP_LICENSE = import("COPYING");
 enum APP_CAP = [APP_NAME];
 
 int main(string[] args) {
-  try {
     return runApplication(args, (Program app) {
-	// app.add(new Argument("path", "the path(s) to print the directory part of").optional.repeating); For example, add an argument to the command parser,
-	// See https://github.com/robik/commandr for documentation on that.
-      },
-      (ProgramArgs args) {
-0	// Process args additionally, and then perform app things (fill in with the functional part of app)
-      }
-      return 0;
+        // app.add(new Argument("path", "the path(s) to print the directory part of").optional.repeating); For example, add an argument to the command parser,
+        // See https://github.com/robik/commandr for documentation on that.
+    },
+    (ProgramArgs args) {
+        try {
+            // Process args additionally, and then perform app things (fill in with the functional part of app)
+        } catch(Exception ex) {
+            stderr.writeln(APP_NAME, ": ", ex.msg);
+            return 1;
+        }
     });
-  } catch(Exception ex) {
-    stderr.writeln(APP_NAME, ": ", ex.msg);
-    return 1;
-  }
 }
