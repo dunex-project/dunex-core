@@ -8,9 +8,28 @@
 	Author(s): chaomodus
 */
 
-import core.sys.posix.unistd : sync;
+module app;
 
-int main() {
-	sync();
-	return 0;
+import common.cmd;
+
+import core.sys.posix.unistd : sync;
+import std.stdio : stderr, writeln;
+
+enum APP_NAME = "sync";
+enum APP_DESC = "Synchronize cached writes to persistant storage.";
+enum APP_VERSION = "1.0 (dunex-core)";
+enum APP_AUTHORS = ["chaomodus"];
+enum APP_LICENSE = import("COPYING");
+enum APP_CAP = [APP_NAME];
+
+int main(string[] args) {
+	return runApplication(args, (Program app) {}, (ProgramArgs args) {
+	    try {
+	        sync();
+	    } catch (Exception ex) {
+            stderr.writeln(APP_NAME, ": ", ex.msg);
+            return 1;
+        }
+        return 0;
+	});
 }

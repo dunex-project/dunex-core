@@ -15,6 +15,7 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 * mkfifo (1dunex)
 * pwd (1dunex)
 * return - works as true or false (1dunex)
+* sync (1dunex)
 * tee (1dunex)
 * tty (1dunex)
 * yes (1dunex)
@@ -27,7 +28,6 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 
 * uname (this doesn't match Linux, but matches FreeBSD's implementation)
 * true / false (i called it "return" and it will work if you name it true, or false).
-* sync
 * basename
 * tsort
 * cut (extends functionality in useful ways that are substantially better than gnu version).
