@@ -15,7 +15,7 @@ module app;
 import common.cmd;
 
 import std.array : join, replace;
-import std.file : dirEntries, readText, SpanMode, write;
+import std.file : dirEntries, DirEntry, isDir, isFile, readText, SpanMode, write;
 import std.format : format;
 import std.path : expandTilde, globMatch, isValidPath;
 import std.regex : matchFirst;
@@ -32,13 +32,14 @@ int main(string[] args) {
     return runApplication(args, (Program app) {
         app.add(new Flag("r", "recurse", "Enables depth-first recursion.").name("recurse").optional);
         app.add(new Option("e", "except", "A regex which, when present in a pathname, will omit that pathname and any descendants.").name("except").optional);
+        app.add(new Option("o", "only", "Only replace the string in the given file. The in argument, and the e and r flags are ignored.").name("only").optional);
         app.add(new Argument("from", "A string to be replaced.").name("origStr"));
         app.add(new Argument("to", "The new string to be written.").name("toStr"));
-        app.add(new Argument("in", "Directory in which to search files for the given string.").name("inDir"));
+        app.add(new Argument("in", "The directory in which to search files for the given string.").name("inDir").optional);
     },
     (ProgramArgs args) {
         try {
-            string inDir = args.arg("inDir");
+            string inDir = args.option("only").length > 0 ? args.option("only") : args.arg("inDir");
             if (!inDir.matchFirst("~").empty())
                 inDir = expandTilde(inDir);
             if (!isValidPath(inDir))
@@ -48,21 +49,17 @@ int main(string[] args) {
 
             SpanMode sMode = args.flag("recurse") ? SpanMode.depth : SpanMode.shallow;
 
-            foreach (path; dirEntries(inDir, sMode)) {
-                if ((except != "") && (!path.name().matchFirst(except).empty()))
-                    continue;
+            if (isFile!string(inDir) && !isDir!string(inDir)) {
+            	remplacer(args.arg("origStr"), args.arg("toStr"), DirEntry(inDir));
+            } else {
+            	foreach (path; dirEntries(inDir, sMode)) {
+	                if ((except != "") && (!path.name().matchFirst(except).empty()))
+	                    continue;
 
-                if (path.isFile()) {
-                    string fileContent;
-                    try {
-                        fileContent = readText(path.name());
-                        writeln("Altered ", path.name());
-                    } catch (Exception ex) {
-                        continue;
-                    }
-                    string fileToWrite = fileContent.replace(args.arg("origStr"), args.arg("toStr"));
-                    path.name().write(fileToWrite);
-                }
+	                if (path.isFile()) {
+	                    remplacer(args.arg("origStr"), args.arg("toStr"), path);
+	                }
+	            }
             }
         } catch (Exception ex) {
             stderr.writeln(APP_NAME, ": ", ex.msg);
@@ -71,4 +68,17 @@ int main(string[] args) {
 
         return 0;
     });
+}
+
+// "replace" is already used in this namespace 🤷️
+void remplacer(string from, string to, DirEntry inFile) {
+    string fileContent;
+    try {
+        fileContent = readText(inFile.name());
+        writeln("Altered ", inFile.name());
+    } catch (Exception ex) {
+        return;
+    }
+    string contentToWrite = fileContent.replace(from, to);
+    inFile.name().write(contentToWrite);
 }
