@@ -10,81 +10,77 @@
 	Bugs:
 		Does not support full character escapes, just letter ones and \0.
  */
+module app;
 
+import common.cmd;
 import common.escapes;
 
 import std.array;
 import std.algorithm;
 import std.conv;
-import std.getopt;
 import std.format;
 import std.stdio;
 
+enum APP_NAME = "seq";
+enum APP_DESC = "Output a sequence of numbers";
+enum APP_VERSION = "1.0 (dunex-core)";
+enum APP_AUTHORS = ["chaomodus"];
+enum APP_LICENSE = import("COPYING");
+enum APP_CAP = [APP_NAME];
+
 int main(string[] args) {
-	string fmt = "%g";
-	string specfmt;
-	string separator = "\n";
-	string terminal = "";
-	bool width;
+	return runApplication(args, (Program app) {
+        app.add(new Argument("values", "[first [incr]] last; first defaults to 0 and incr defaults to 1").required.repeating);
+        app.add(new Option("f", "format", "specify printf(3)-style format to print values").name("format").optional.defaultValue("%g"));
+        app.add(new Option("s", "separator", "specify separator to place between each number").name("separator").optional.defaultValue("\n"));
+        app.add(new Option("t", "terminal", "specify the terminating character to print").name("terminal").optional);
+        app.add(new Flag("w", "fixed-width", "pad numbers to equal width").name("fixedWidth").optional);
+    },
+    (ProgramArgs args) {
+        try {
+			real first = 0;
+			real incr = 1;
+			real last;
 
-	auto helpInformation = getopt(args, std.getopt.config.passThrough,
-		"f|format", "Specify a printf format", &specfmt,
-		"s|separator", "Specify the separator to place between each number.", &separator,
-		"t|terminal", "Specify the terminating character to print.", &terminal,
-		"w|width", "Pad numbers to maximum width.", &width
-	);
+			if (args.args("values").length > 1)
+				first = to!real(args.args("values")[0]);
+			if (args.args("values").length == 3)
+				incr = to!real(args.args("values")[1]);
+			last = to!real(args.args("values")[$ - 1]);
 
-	if (helpInformation.helpWanted || args.length == 1) {
-		defaultGetoptPrinter(
-			"Output a sequence of numbers.\nSpecify [FIRST [INCR]] LAST, FIRST defaults to 0, INCR defaults to 1",
-			helpInformation.options
-		);
-		return 1;
-	}
+			string fmt = args.option("format");
+			string separator = args.option("separator");
+			string terminal = args.option("terminal");
 
-	args.popFront();
+			if (first > last) {
+				if (incr > 0)
+					incr = incr * -1;
+			}
 
-	real first = 0;
-	real incr = 1;
-	real last;
+			ulong maxwidth;
+			maxwidth = format(fmt, max(first, last)).length;
+			if (args.flag("fixedWidth")) {
+				fmt = format("%%0%dg", maxwidth);
+			}
 
-	last = to!real(args[$ - 1]);
+			separator = decodeEscapes(separator);
+			if (terminal.length == 0)
+				terminal = separator;
+			else
+				terminal = decodeEscapes(terminal);
 
-	if (args.length > 1) {
-		if (args.length > 2) {
-			incr = to!real(args[$ - 2]);
-		}
-		first = to!real(args[0]);
-	}
+			real seq;
+			for (seq = first; (incr < 0) ? (seq + incr >= last) : (seq + incr <= last); seq += incr) {
+				stdout.write(format(fmt, seq));
+				stdout.write(separator);
+			}
+			stdout.write(format(fmt, seq));
+			stdout.write(terminal);
 
-	if (first > last) {
-		if (incr > 0)
-			incr = incr * -1;
-	}
-
-	ulong maxwidth;
-	if (specfmt.length) {
-		fmt = specfmt;
-	} else {
-		maxwidth = format(fmt, max(first, last)).length;
-		if (width) {
-			fmt = format("%%0%dg", maxwidth);
-		}
-	}
-
-	separator = decodeEscapes(separator);
-	if (terminal.length == 0)
-		terminal = separator;
-	else
-		terminal = decodeEscapes(terminal);
-
-	real seq;
-	for (seq = first; (incr < 0) ? (seq + incr >= last) : (seq + incr <= last); seq += incr) {
-		stdout.write(format(fmt, seq));
-		stdout.write(separator);
-	}
-	stdout.write(format(fmt, seq + incr));
-	stdout.write(terminal);
-
-	return 0;
+			return 0;
+        } catch(Exception ex) {
+            stderr.writeln(APP_NAME, ": ", ex.msg);
+            return 1;
+        }
+    });
 }

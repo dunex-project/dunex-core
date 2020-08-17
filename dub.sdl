@@ -181,6 +181,7 @@ subPackage {
 	targetPath "out/"
 	targetName "seq"
 	sourcePaths "src/seq"
+	stringImportPaths "."
 }
 subPackage {
 	name "sleep"

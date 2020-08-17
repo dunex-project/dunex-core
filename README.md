@@ -15,6 +15,7 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 * mkfifo (1dunex)
 * pwd (1dunex)
 * return - works as true or false (1dunex)
+* seq (1dunex)
 * tee (1dunex)
 * tty (1dunex)
 * yes (1dunex)
@@ -32,7 +33,6 @@ Either `dub build` to use dub or `./build.sh` to use meson.
 * tsort
 * cut (extends functionality in useful ways that are substantially better than gnu version).
 * unlink
-* seq
 * sleep
 * su
 * wc
