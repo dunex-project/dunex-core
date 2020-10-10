@@ -11,7 +11,7 @@ mkdir doc/man/html
 
 for page in doc/man/*.md; do
     base=$(basename $page .md)
-    pandoc  --standalone --to html5 $page -o "doc/man/html/$basename.html"
+    pandoc  --standalone --to html5 $page -o "doc/man/html/$base.html"
     chap=$(echo $page | cut -d. -f2)
     mkdir doc/man/man/"man$chap"
     pandoc  --standalone --to man $page -o "doc/man/man/man$chap/$base"
