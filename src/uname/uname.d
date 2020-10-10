@@ -9,61 +9,80 @@
 	Written by: chaomodus
 */
 
-import std.stdio;
-import std.string;
-import std.algorithm : canFind;
+module app;
+
+import common.cmd;
+
 import core.stdc.errno;
 import core.sys.posix.sys.utsname;
-import core.stdc.stdio : perror;
+import std.algorithm : canFind;
+import std.stdio;
+import std.string;
+
+enum APP_NAME = "uname";
+enum APP_DESC = "Print information about the operating system.";
+enum APP_VERSION = "1.0 (dunex-core)";
+enum APP_AUTHORS = ["chaomodus"];
+enum APP_LICENSE = import("COPYING");
+enum APP_CAP = [APP_NAME];
 
 int main(string[] args) {
-	utsname info;
-	int result = core.sys.posix.sys.utsname.uname(&info);
+	return runApplication(args, (Program app) {
+		app.add(new Flag("a", null, "Behave as though '-s -n -r -v -m' were specified.").name("a").optional);
+		app.add(new Flag("m", null, "Print the machine architecture.").name("m").optional);
+		app.add(new Flag("n", null, "Print the name of the system.").name("n").optional);
+		app.add(new Flag("o", null, "Synonym of -s for compatibility.").name("o").optional);
+		app.add(new Flag("r", null, "Print the current kernel release.").name("r").optional);
+		app.add(new Flag("s", null, "Print the name of the operating system (default).").name("s").optional);
+		app.add(new Flag("v", null, "Print the version of this OS.").name("v").optional);
+	},
+	(ProgramArgs args) {
+		try {
+			utsname info;
+			int result = core.sys.posix.sys.utsname.uname(&info);
 
-	if (result == 0) {
-		// Handle cases for no arguments and for -a argument.
-		if (args.length == 1)
-			args = ["", "-s"];
-		if (args.canFind("-a"))
-			args = ["", "-s", "-n", "-r", "-v", "-m"];
+			if (result != 0)
+				throw new Exception("invalid system information buffer");
 
-		foreach (idx, arg; args[1 .. $]) {
-			switch (arg) {
+			if (args.flag("a")) {
+				stdout.writeln(info.sysname, " ", info.nodename, " ", info.release, " ", info.version_, " ", info.machine);
+			} else {
+				bool written = false;
 
-			case "-o", "-s":
-				stdout.write(info.sysname);
-				break;
+				if (args.flag("s") || args.flag("o")) {
+					stdout.write(info.sysname, " ");
+					written = true;
+				}
 
-			case "-n":
-				stdout.write(info.nodename);
-				break;
+				if (args.flag("n")) {
+					stdout.write(info.nodename, " ");
+					written = true;
+				}
 
-			case "-r":
-				stdout.write(info.release);
-				break;
+				if (args.flag("r")) {
+					stdout.write(info.release, " ");
+					written = true;
+				}
 
-			case "-v":
-				stdout.write(info.version_);
-				break;
+				if (args.flag("v")) {
+					stdout.write(info.version_, " ");
+					written = true;
+				}
 
-			case "-m":
-				stdout.write(info.machine);
-				break;
+				if (args.flag("m")) {
+					stdout.write(info.machine, " ");
+					written = true;
+				}
 
-			default:
-				stdout.writeln("unknown argument: ", arg);
-				return 1;
-
+				if (!written)
+					stdout.writeln(info.sysname);
+				else
+					stdout.write("\b \b\n");
 			}
-
-			if (idx != args.length - 2) {
-				stdout.write(" ");
-			}
+			return 0;
+		} catch (Exception e) {
+			stderr.writeln(APP_NAME, ": ", e.msg);
+			return 1;
 		}
-	} else {
-		perror(null);
-		return 1;
-	}
-	stdout.write("\n");
-	return 0;
+	});
 }
