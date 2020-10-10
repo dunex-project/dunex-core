@@ -3,55 +3,59 @@
 	Use, modification and distribution are subject to the
 	Boost Software License, Version 1.0.  (See accompanying file
 	COPYING or copy at http://www.boost.org/LICENSE_1_0.txt)
-	
+
 	basename: print the filename portion of a path name, optionally stripping a suffix
 	Author(s): chaomodus
 */
 
+module app;
+
+import common.cmd;
+
 import std.path : baseName;
-import std.stdio;
-import std.getopt;
-import std.string;
+import std.stdio : stderr, writeln;
+import std.string : endsWith;
+
+enum APP_NAME = "basename";
+enum APP_DESC = "Print the filename portion of a path name.";
+enum APP_VERSION = "1.0 (dunex-core)";
+enum APP_AUTHORS = ["chaomodus"];
+enum APP_LICENSE = import("COPYING");
+enum APP_CAP = [APP_NAME];
 
 int main(string[] args) {
-	bool multiple = false;
-	string suffix;
-	string[] paths;
-	auto helpInformation = getopt(args, std.getopt.config.passThrough, 
-		"a|multiple", "Process each argument as a path name.", &multiple, 
-		"s|suffix", "Specify a suffix in -a mode.", &suffix
-	);
+	return runApplication(args, (Program app) {
+		app.add(new Flag("a", "multiple", "Process each argument as a path name.").name("multiple").optional);
+		app.add(new Option("s", "suffix", "Specify a suffix to omit.").name("suffix").optional);
+		app.add(new Argument("path", "The path(s) to process.").required.repeating);
+	},
+	(ProgramArgs args) {
+		try {
+			string suffix;
+			string[] paths;
 
-	if (helpInformation.helpWanted) {
-		defaultGetoptPrinter("Print the basename portion of a pathname.", helpInformation.options);
-		return 1;
-	}
+			if (args.flag("multiple")) {
+				paths = args.args("path");
+			} else {
+				paths ~= [args.args("path")[0]];
+			}
 
-	if (multiple) {
-		if (!(args.length >= 2)) {
-			writeln(args[0], ": specify at least one path.");
+			if (args.option("suffix").length > 0) {
+				suffix = args.option("suffix");
+			} else if (!args.flag("multiple") && args.args("path").length == 2) {
+				suffix = args.args("path")[1];
+			}
+
+			foreach (path; paths) {
+				if (path.endsWith(suffix) && path != suffix) {
+					path = path[1 .. $ - suffix.length];
+				}
+				writeln(baseName(path));
+			}
+			return 0;
+		} catch (Exception e) {
+			stderr.writeln(APP_NAME, ": ", e.msg);
 			return 1;
 		}
-		paths = args[1 .. $];
-	} else {
-		if (args.length < 2) {
-			writeln(args[0], ": specify a path name.");
-			return 1;
-		} else if (args.length > 3) {
-			writeln(args[0], ": too many arguments. Specify a path name and optional suffix.");
-			return 1;
-		}
-		paths ~= [args[1]];
-		if (args.length == 3) {
-			suffix = args[2];
-		}
-	}
-
-	foreach (path; paths) {
-		if (path.endsWith(suffix) && path != suffix) {
-			path = path[1 .. $ - suffix.length];
-		}
-		writeln(baseName(path));
-	}
-	return 0;
+	});
 }
