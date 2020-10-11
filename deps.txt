@@ -1,0 +1,3 @@
+nice-curses=https://github.com/mpevnev/nice-curses=v0.2.5
+commandr=https://github.com/robik/commandr=v0.2.0
+djtext=https://github.com/o3o/djtext=v0.3.0
